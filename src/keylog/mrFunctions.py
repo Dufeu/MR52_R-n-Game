@@ -17,7 +17,7 @@ def OnMouseEvent(event):
     '''
     
     tableKey = []
-    tableKey.append(event.MessageName)
+    tableKey.append([event.MessageName,event.Position,event.Time])
     print(tableKey)
     # return True to pass the event to other handlers
     # return False to stop the event from propagating
@@ -40,4 +40,8 @@ def OnKeyboardEvent(event):
     print('Transition', event.Transition)
     print('---')
     '''
+    
+    tableKey = []
+    tableKey.append([event.MessageName,event.Key,chr(event.Ascii),event.Time])
+    print(tableKey)
     return True
