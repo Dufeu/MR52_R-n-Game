@@ -6,9 +6,16 @@ Created on 27 oct. 2012
 
 import Tkinter
 import mrHook
+import sys
+import mrQWindow
+from PyQt4  import QtCore,QtGui,Qt
 
-top = Tkinter.Tk()
+"""top = Tkinter.Tk()
 top.title("ma fenetre")
 button = Tkinter.Button(top,text = "Run Keylogger",command = mrHook.RunKeyCallBack)
 button.pack()
-top.mainloop()
+top.mainloop()"""
+
+app = QtGui.QApplication(sys.argv)   
+win = mrQWindow.mrCWin()
+app.exec_()
