@@ -1,8 +1,17 @@
 '''
-Created on 27 oct. 2012
+Created on 28 oct. 2012
 
-@author: Lois Aubree
+@author: Lois Aubree 
+
+This thread is called by the mrQWindow when the recognized OS is Windows
 '''
+import sys
+import pyHook
+import thread
+import threading
+import pythoncom
+import time
+
 def OnMouseEvent(event):
     '''
     print('MessageName:',event.MessageName)
@@ -45,3 +54,35 @@ def OnKeyboardEvent(event):
     tableKey.append([event.MessageName,event.Key,chr(event.Ascii),event.Time])
     print(tableKey)
     return True
+
+
+class WinHookThread(threading.Thread):
+    def __init__(self):
+        threading.Thread.__init__(self)
+        self.is_alive = False
+        timeF = time.time()
+        self.hm = pyHook.HookManager()
+        self.hm.KeyUp = OnKeyboardEvent
+        self.hm.KeyDown = OnKeyboardEvent
+        self.hm.MouseAllButtonsDown = OnMouseEvent
+        self.hm.MouseAllButtonsUp = OnMouseEvent
+    
+    def run(self):
+        print("Windows Distribution")
+        self.hm.HookMouse()
+        self.hm.HookKeyboard()
+        pythoncom.PumpMessages()
+        
+    def stop(self):
+        self.hm.UnhookMouse()
+        self.hm.UnhookKeyboard()
+        self.is_alive = False
+    
+    def isAlive(self):
+        return self.is_alive
+        
+def RunKeyCallBack(self):
+    if self.HookThread.isAlive():
+        self.HookThread.stop()
+    else:
+        self.HookThread.run()

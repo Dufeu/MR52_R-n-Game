@@ -5,7 +5,6 @@ Created on 27 oct. 2012
 '''
 
 import Tkinter
-import mrHook
 import sys
 import mrQWindow
 import py2exe
@@ -19,7 +18,7 @@ button.pack()
 top.mainloop()"""
 
 app = QtGui.QApplication(sys.argv)   
-win = mrQWindow.mrCWin()
+win = mrQWindow.mrCWin(sys.platform)
 app.exec_()
 
 """setup(console =["hello world !"])"""
