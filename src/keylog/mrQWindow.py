@@ -14,7 +14,10 @@ class mrCWin(QtGui.QWidget):
     
     def initUI(self):
         self.setWindowTitle(" Ma fenetre")
-        button = QtGui.QPushButton('button',self)
-        button.clicked.connect(mrHook.RunKeyCallBack)
+        self.button = QtGui.QPushButton('button',self)
+        self.HookThread = mrHook.HookClassThread()
+        self.connect(self.button, QtCore.SIGNAL('clicked()'),self.RunHookCallBack)
         self.show()
         
+    def RunHookCallBack(self):
+        mrHook.RunKeyCallBack(self)
