@@ -59,30 +59,84 @@ def OnKeyboardEvent(event):
 class WinHookThread(threading.Thread):
     def __init__(self):
         threading.Thread.__init__(self)
-        self.is_alive = False
-        timeF = time.time()
+        self.is_Key_alive = False
+        self.is_Mouse_alive = False
         self.hm = pyHook.HookManager()
         self.hm.KeyUp = OnKeyboardEvent
         self.hm.KeyDown = OnKeyboardEvent
         self.hm.MouseAllButtonsDown = OnMouseEvent
         self.hm.MouseAllButtonsUp = OnMouseEvent
     
-    def run(self):
+    def runAll(self):
         print("Windows Distribution")
         self.hm.HookMouse()
         self.hm.HookKeyboard()
+        self.is_Key_alive = True
+        self.is_Mouse_alive = True
         pythoncom.PumpMessages()
+    
+    def runKey(self):
+        self.hm.HookKeyboard()
+        self.is_Key_alive = True
+        pythoncom.PumpMessages()
+    
+    def runMouse(self):
+        self.hm.HookMouse()
+        self.is_Mouse_alive = True
+        pythoncom.PumpMessages()
+        
         
     def stop(self):
         self.hm.UnhookMouse()
         self.hm.UnhookKeyboard()
-        self.is_alive = False
+        self.is_Key_alive = False
+        self.is_Mouse_alive = False
     
-    def isAlive(self):
-        return self.is_alive
+    def stopKey(self):
+        self.hm.UnhookKeyboard()
+        self.is_Key_alive = False
+    
+    def stopMouse(self):
+        self.hm.UnhookMouse()
+        self.is_Mouse_alive = False
+    
+    def isAliveKey(self):
+        return self.is_Key_alive
+    
+    def isAliveMouse(self):
+        return self.is_Mouse_alive
+    
+    def setOnkeyBoardEvent(self,func):
+        self.hm.KeyUp = func
+        self.hm.KeyDown = func
+    
+    def setOnkeyMouseEvent(self,func):
+        self.hm.MouseAllButtonsUp = func
+        self.hm.MouseAllButtonsDown = func
         
-def RunKeyCallBack(self):
-    if self.HookThread.isAlive():
-        self.HookThread.stop()
+def RunAllCallBack(self):
+    if self.HookThread.isAliveKey() == False and self.HookThread.isAliveMouse() == False:
+        self.HookThread.runAll()
+    elif self.isAliveMouse() == True:
+        self.HookThread.runKey()
     else:
-        self.HookThread.run()
+        self.HookThread.runMouse()
+
+def StopAllCallBack(self):
+    self.HookThread.stop()
+    
+def RunKeyCallBack(self):
+    assert(self.HookThread.isAliveKey() == False)
+    self.HookThread.runKey()
+
+def StopKeyCallBack(self):
+    assert(self.HookThread.isAliveKey())
+    self.HookThread.stopKey()
+    
+def RunMouseCallBack(self):
+    assert(self.HookThread.isAliveMouse() == False)
+    self.HookThread.runMouse()
+    
+def StopMouseCallBack(self):
+    assert(self.HookThread.isAliveMouse())
+    self.HookThread.stopMouse()

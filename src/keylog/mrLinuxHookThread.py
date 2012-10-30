@@ -34,8 +34,22 @@ class LinuxHookThread(threading.Thread):
     def isAlive(self):
         return self.is_alive
 
+def RunAllCallBack(self):
+    assert(self.HookThread.isAlive()==False)
+    self.HookThread.runAll()
+
+def StopAllCallBack(self):
+    assert(self.HookThread.isAlive()==True)
+    self.HookThread.stop()
+    
 def RunKeyCallBack(self):
-    if self.HookThread.isAlive():
-        self.HookThread.stop()
-    else:
-        self.HookThread.run()
+    pass
+
+def StopKeyCallBack(self):
+    pass
+    
+def RunMouseCallBack(self):
+    pass
+    
+def StopMouseCallBack(self):
+    pass
