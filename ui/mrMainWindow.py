@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mrMainWindow.ui'
 #
-# Created: Tue Oct 30 14:55:56 2012
+# Created: Thu Nov 22 21:04:15 2012
 #      by: PyQt4 UI code generator 4.9.5
 #
 # WARNING! All changes made in this file will be lost!
@@ -17,27 +17,26 @@ except AttributeError:
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName(_fromUtf8("MainWindow"))
-        MainWindow.resize(800, 600)
+        MainWindow.resize(755, 600)
+        icon = QtGui.QIcon()
+        icon.addPixmap(QtGui.QPixmap(_fromUtf8(":/icon/icon/icon.png")), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        MainWindow.setWindowIcon(icon)
         self.centralwidget = QtGui.QWidget(MainWindow)
         self.centralwidget.setObjectName(_fromUtf8("centralwidget"))
         self.gridLayout = QtGui.QGridLayout(self.centralwidget)
+        self.gridLayout.setMargin(0)
+        self.gridLayout.setSpacing(0)
         self.gridLayout.setObjectName(_fromUtf8("gridLayout"))
-        self.scrollArea = QtGui.QScrollArea(self.centralwidget)
-        self.scrollArea.setWidgetResizable(True)
-        self.scrollArea.setObjectName(_fromUtf8("scrollArea"))
-        self.scrollAreaWidgetContents = QtGui.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 780, 539))
-        self.scrollAreaWidgetContents.setObjectName(_fromUtf8("scrollAreaWidgetContents"))
-        self.gridLayout_2 = QtGui.QGridLayout(self.scrollAreaWidgetContents)
+        self.gridLayout_2 = QtGui.QGridLayout()
+        self.gridLayout_2.setSpacing(0)
         self.gridLayout_2.setObjectName(_fromUtf8("gridLayout_2"))
-        self.textEdit = QtGui.QTextEdit(self.scrollAreaWidgetContents)
-        self.textEdit.setObjectName(_fromUtf8("textEdit"))
-        self.gridLayout_2.addWidget(self.textEdit, 0, 0, 1, 1)
-        self.scrollArea.setWidget(self.scrollAreaWidgetContents)
-        self.gridLayout.addWidget(self.scrollArea, 0, 0, 1, 1)
+        self.mdiArea = QtGui.QMdiArea(self.centralwidget)
+        self.mdiArea.setObjectName(_fromUtf8("mdiArea"))
+        self.gridLayout_2.addWidget(self.mdiArea, 0, 0, 1, 1)
+        self.gridLayout.addLayout(self.gridLayout_2, 0, 0, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtGui.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 21))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 755, 21))
         self.menubar.setObjectName(_fromUtf8("menubar"))
         self.menuFile = QtGui.QMenu(self.menubar)
         self.menuFile.setObjectName(_fromUtf8("menuFile"))
@@ -47,6 +46,8 @@ class Ui_MainWindow(object):
         self.menuStop.setObjectName(_fromUtf8("menuStop"))
         self.menuAbout = QtGui.QMenu(self.menubar)
         self.menuAbout.setObjectName(_fromUtf8("menuAbout"))
+        self.menuDisplay = QtGui.QMenu(self.menubar)
+        self.menuDisplay.setObjectName(_fromUtf8("menuDisplay"))
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QtGui.QStatusBar(MainWindow)
         self.statusbar.setObjectName(_fromUtf8("statusbar"))
@@ -76,8 +77,16 @@ class Ui_MainWindow(object):
         self.actionAbout_Me.setObjectName(_fromUtf8("actionAbout_Me"))
         self.actionVersion = QtGui.QAction(MainWindow)
         self.actionVersion.setObjectName(_fromUtf8("actionVersion"))
+        self.actionKeyboard_Table = QtGui.QAction(MainWindow)
+        self.actionKeyboard_Table.setObjectName(_fromUtf8("actionKeyboard_Table"))
+        self.actionMouse_Table = QtGui.QAction(MainWindow)
+        self.actionMouse_Table.setObjectName(_fromUtf8("actionMouse_Table"))
+        self.actionReset_Inputs = QtGui.QAction(MainWindow)
+        self.actionReset_Inputs.setObjectName(_fromUtf8("actionReset_Inputs"))
         self.menuFile.addAction(self.actionOpen)
         self.menuFile.addAction(self.actionSave)
+        self.menuFile.addSeparator()
+        self.menuFile.addAction(self.actionReset_Inputs)
         self.menuFile.addSeparator()
         self.menuFile.addAction(self.actionQuit)
         self.menuRun.addAction(self.actionRun_All_Record)
@@ -90,9 +99,12 @@ class Ui_MainWindow(object):
         self.menuStop.addAction(self.actionStop_Mouse_Record)
         self.menuAbout.addAction(self.actionAbout_Me)
         self.menuAbout.addAction(self.actionVersion)
+        self.menuDisplay.addAction(self.actionKeyboard_Table)
+        self.menuDisplay.addAction(self.actionMouse_Table)
         self.menubar.addAction(self.menuFile.menuAction())
         self.menubar.addAction(self.menuRun.menuAction())
         self.menubar.addAction(self.menuStop.menuAction())
+        self.menubar.addAction(self.menuDisplay.menuAction())
         self.menubar.addAction(self.menuAbout.menuAction())
 
         self.retranslateUi(MainWindow)
@@ -104,6 +116,7 @@ class Ui_MainWindow(object):
         self.menuRun.setTitle(QtGui.QApplication.translate("MainWindow", "Run", None, QtGui.QApplication.UnicodeUTF8))
         self.menuStop.setTitle(QtGui.QApplication.translate("MainWindow", "Stop", None, QtGui.QApplication.UnicodeUTF8))
         self.menuAbout.setTitle(QtGui.QApplication.translate("MainWindow", "About", None, QtGui.QApplication.UnicodeUTF8))
+        self.menuDisplay.setTitle(QtGui.QApplication.translate("MainWindow", "Display", None, QtGui.QApplication.UnicodeUTF8))
         self.actionOpen.setText(QtGui.QApplication.translate("MainWindow", "Open", None, QtGui.QApplication.UnicodeUTF8))
         self.actionSave.setText(QtGui.QApplication.translate("MainWindow", "Save", None, QtGui.QApplication.UnicodeUTF8))
         self.actionQuit.setText(QtGui.QApplication.translate("MainWindow", "Quit", None, QtGui.QApplication.UnicodeUTF8))
@@ -113,9 +126,13 @@ class Ui_MainWindow(object):
         self.actionStop_All_Record.setText(QtGui.QApplication.translate("MainWindow", "Stop All Record", None, QtGui.QApplication.UnicodeUTF8))
         self.actionStop_Key_Record.setText(QtGui.QApplication.translate("MainWindow", "Stop Key Record", None, QtGui.QApplication.UnicodeUTF8))
         self.actionStop_Mouse_Record.setText(QtGui.QApplication.translate("MainWindow", "Stop Mouse Record", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionAbout_Me.setText(QtGui.QApplication.translate("MainWindow", "About Me", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionAbout_Me.setText(QtGui.QApplication.translate("MainWindow", "About", None, QtGui.QApplication.UnicodeUTF8))
         self.actionVersion.setText(QtGui.QApplication.translate("MainWindow", "Version", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionKeyboard_Table.setText(QtGui.QApplication.translate("MainWindow", "Keyboard Table", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionMouse_Table.setText(QtGui.QApplication.translate("MainWindow", "Mouse Table", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionReset_Inputs.setText(QtGui.QApplication.translate("MainWindow", "Reset Inputs", None, QtGui.QApplication.UnicodeUTF8))
 
+import res.res_rc
 
 if __name__ == "__main__":
     import sys

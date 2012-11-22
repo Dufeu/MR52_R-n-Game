@@ -1,27 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
+ <author>Aubrée Loïs</author>
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
+    <width>755</width>
     <height>600</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../res/res.qrc">
+    <normaloff>:/icon/icon/icon.png</normaloff>:/icon/icon/icon.png</iconset>
+  </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QGridLayout" name="gridLayout"/>
+   <layout class="QGridLayout" name="gridLayout">
+    <property name="margin">
+     <number>0</number>
+    </property>
+    <property name="spacing">
+     <number>0</number>
+    </property>
+    <item row="0" column="0">
+     <layout class="QGridLayout" name="gridLayout_2">
+      <property name="spacing">
+       <number>0</number>
+      </property>
+      <item row="0" column="0">
+       <widget class="QMdiArea" name="mdiArea"/>
+      </item>
+     </layout>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>755</width>
      <height>21</height>
     </rect>
    </property>
@@ -31,6 +53,8 @@
     </property>
     <addaction name="actionOpen"/>
     <addaction name="actionSave"/>
+    <addaction name="separator"/>
+    <addaction name="actionReset_Inputs"/>
     <addaction name="separator"/>
     <addaction name="actionQuit"/>
    </widget>
@@ -59,9 +83,17 @@
     <addaction name="actionAbout_Me"/>
     <addaction name="actionVersion"/>
    </widget>
+   <widget class="QMenu" name="menuDisplay">
+    <property name="title">
+     <string>Display</string>
+    </property>
+    <addaction name="actionKeyboard_Table"/>
+    <addaction name="actionMouse_Table"/>
+   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuRun"/>
    <addaction name="menuStop"/>
+   <addaction name="menuDisplay"/>
    <addaction name="menuAbout"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
@@ -121,7 +153,7 @@
   </action>
   <action name="actionAbout_Me">
    <property name="text">
-    <string>About Me</string>
+    <string>About</string>
    </property>
   </action>
   <action name="actionVersion">
@@ -129,7 +161,24 @@
     <string>Version</string>
    </property>
   </action>
+  <action name="actionKeyboard_Table">
+   <property name="text">
+    <string>Keyboard Table</string>
+   </property>
+  </action>
+  <action name="actionMouse_Table">
+   <property name="text">
+    <string>Mouse Table</string>
+   </property>
+  </action>
+  <action name="actionReset_Inputs">
+   <property name="text">
+    <string>Reset Inputs</string>
+   </property>
+  </action>
  </widget>
- <resources/>
+ <resources>
+  <include location="../res/res.qrc"/>
+ </resources>
  <connections/>
 </ui>

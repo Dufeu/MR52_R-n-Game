@@ -1,0 +1,1 @@
+C:\Python27\Lib\site-packages\PyQt4\uic\pyuic.py -o mrMainWindow.py -x mrMainWindow.ui
