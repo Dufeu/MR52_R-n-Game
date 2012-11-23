@@ -55,22 +55,49 @@
          <widget class="QTabWidget" name="tabWidget">
           <property name="minimumSize">
            <size>
-            <width>180</width>
+            <width>220</width>
             <height>0</height>
            </size>
           </property>
           <property name="currentIndex">
-           <number>0</number>
+           <number>1</number>
+          </property>
+          <property name="movable">
+           <bool>true</bool>
           </property>
           <widget class="QWidget" name="KeyTab">
+           <attribute name="icon">
+            <iconset resource="../res/res.qrc">
+             <normaloff>:/icon/icon/icon.png</normaloff>:/icon/icon/icon.png</iconset>
+           </attribute>
            <attribute name="title">
             <string>Key Stats</string>
            </attribute>
+           <layout class="QGridLayout" name="gridLayout_7">
+            <property name="margin">
+             <number>0</number>
+            </property>
+            <item row="0" column="0">
+             <layout class="QGridLayout" name="KeyTabLayout"/>
+            </item>
+           </layout>
           </widget>
           <widget class="QWidget" name="MouseTab">
+           <attribute name="icon">
+            <iconset resource="../res/res.qrc">
+             <normaloff>:/icon/icon/icon.png</normaloff>:/icon/icon/icon.png</iconset>
+           </attribute>
            <attribute name="title">
             <string>Mouse Stats</string>
            </attribute>
+           <layout class="QGridLayout" name="gridLayout_6">
+            <property name="margin">
+             <number>0</number>
+            </property>
+            <item row="0" column="0">
+             <layout class="QGridLayout" name="MouseTabLayout"/>
+            </item>
+           </layout>
           </widget>
          </widget>
         </item>
@@ -251,11 +278,10 @@
     <property name="title">
      <string>Display</string>
     </property>
-    <addaction name="actionKeyboard_Table"/>
-    <addaction name="actionMouse_Table"/>
-    <addaction name="separator"/>
     <addaction name="actionKeyboard_Stats"/>
-    <addaction name="actionMouse_Stats"/>
+    <addaction name="separator"/>
+    <addaction name="actionKeyboard_frequency_graph"/>
+    <addaction name="actionMouse_frequency_graph"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuRun"/>
@@ -344,6 +370,12 @@
    </property>
   </action>
   <action name="actionKeyboard_Stats">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>Keyboard Stats</string>
    </property>
@@ -351,6 +383,28 @@
   <action name="actionMouse_Stats">
    <property name="text">
     <string>Mouse Stats</string>
+   </property>
+  </action>
+  <action name="actionKeyboard_frequency_graph">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Keyboard frequency graph</string>
+   </property>
+  </action>
+  <action name="actionMouse_frequency_graph">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Mouse frequency graph</string>
    </property>
   </action>
  </widget>

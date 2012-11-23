@@ -8,7 +8,8 @@ import time
 import os
 import sys
 from ui import mrMainWindow
-
+from mrFigureCanvas import mrFigureKey
+from mrFigureCanvas import mrFigureMouse
 
 if sys.platform == "linux2":
     import mrLinuxHookThread
@@ -30,6 +31,10 @@ class mrCWin(QtGui.QMainWindow):
         self.tableKey = []
         self.tableMouse = []
         self.tableKeyStats = []
+        self.globalTimer = QtCore.QTimer(self)
+        self.refreshTimerLevel = 10000
+        self.IsKeyRecord = False
+        self.IsMouseRecord = False
         
         """ number global Stats """
         self.nbTotKeyPress = 0 
@@ -37,30 +42,30 @@ class mrCWin(QtGui.QMainWindow):
         self.nbTotRightClic = 0
         self.nbTotLeftCLic = 0
         self.nbTotCilc = 0
+        self.nbClicSec = 0
+        self.nbKeySec = 0
         
         self.statusBarLabel = QtGui.QLabel("Hook is not running")
         
         self.ui.statusbar.addWidget(self.statusBarLabel)
         
-        self.winKey = QtGui.QMdiSubWindow(self)
-        self.winKey.setWindowTitle(" Key Table ")
+        """***************************  INPUTS TABLES **********************************"""
         self.tableKeyWigdet = QtGui.QTableWidget(self)
         list = QtCore.QStringList
         list = ["State", " Key "," Key Input ", " Time "]
         self.tableKeyWigdet.setColumnCount(4)
         self.tableKeyWigdet.setRowCount(0)
         self.tableKeyWigdet.setHorizontalHeaderLabels(list)
-        self.winKey.setWidget(self.tableKeyWigdet)
+        self.ui.KeyTabLayout.addWidget(self.tableKeyWigdet)
         
-        self.winMouse = QtGui.QMdiSubWindow(self)
-        self.winMouse.setWindowTitle(" Mouse Table ")
         self.tableMouseWidget = QtGui.QTableWidget(self)
         list = ["State", " Time "]
         self.tableMouseWidget.setColumnCount(2)
         self.tableMouseWidget.setRowCount(0)
         self.tableMouseWidget.setHorizontalHeaderLabels(list)
-        self.winMouse.setWidget(self.tableMouseWidget)
+        self.ui.MouseTabLayout.addWidget(self.tableMouseWidget)
         
+        """*********************** Key Stats Window ****************************"""
         self.winKeyStats = QtGui.QMdiSubWindow(self)
         self.winKeyStats.setWindowTitle(" Key Stats ")
         self.tableKeyStatsWidget = QtGui.QTableWidget(self)
@@ -69,13 +74,25 @@ class mrCWin(QtGui.QMainWindow):
         self.tableKeyStatsWidget.setRowCount(0)
         self.tableKeyStatsWidget.setHorizontalHeaderLabels(list)
         self.winKeyStats.setWidget(self.tableKeyStatsWidget)
-        
-        self.winKey.show()
-        self.winMouse.show()
         self.winKeyStats.show()
         
-        self.ui.mdiArea.addSubWindow(self.winMouse)
-        self.ui.mdiArea.addSubWindow(self.winKey)
+        """"********************** Graphics Windows ****************************"""
+        self.winMouseGraph = QtGui.QMdiSubWindow(self)
+        self.winMouseGraph.setWindowTitle(" Mouse frequence graphic ")
+        self.figureMouse = mrFigureMouse(self)
+        
+        self.winKeyGraph = QtGui.QMdiSubWindow(self)
+        self.winKeyGraph.setWindowTitle(" Key frequence graphic ")
+        self.figureKey = mrFigureKey(self)
+        
+        self.winKeyGraph.setWidget(self.figureKey)
+        self.winMouseGraph.setWidget(self.figureMouse)  
+        self.winKeyGraph.show()
+        self.winMouseGraph.show()
+        
+        
+        self.ui.mdiArea.addSubWindow(self.winMouseGraph)
+        self.ui.mdiArea.addSubWindow(self.winKeyGraph)
         self.ui.mdiArea.addSubWindow(self.winKeyStats)
         
         if platform == "linux2":
@@ -108,27 +125,56 @@ class mrCWin(QtGui.QMainWindow):
         self.connect(self.ui.actionSave, QtCore.SIGNAL('triggered()'),self.saveFile)
         self.connect(self.ui.actionAbout_Me,QtCore.SIGNAL('triggered()'),self.openAbout)
         self.connect(self.ui.actionVersion,QtCore.SIGNAL('triggered()'),self.openVersion)
-        self.connect(self.ui.actionKeyboard_Table,QtCore.SIGNAL('triggered()'),self.openWinKey)
-        self.connect(self.ui.actionMouse_Table,QtCore.SIGNAL('triggered()'),self.openWinMouse)
+        self.connect(self.ui.actionKeyboard_frequency_graph,QtCore.SIGNAL('triggered()'),self.openWinKeyGraph)
+        self.connect(self.ui.actionMouse_frequency_graph,QtCore.SIGNAL('triggered()'),self.openWinMouseGraph)
         self.connect(self.ui.actionKeyboard_Stats, QtCore.SIGNAL('triggered()'),self.openWinKeyStats)
         self.connect(self.ui.actionReset_Inputs, QtCore.SIGNAL('triggered()'),self.resetAllInputs)
-            
+        
+    
+        self.connect(self.globalTimer, QtCore.SIGNAL('timeout()'),self.updateSecValues)
+        
+        
         self.show()
+        
+    def updateSecValues(self):
+        self.figureKey.update_figure(self.nbKeySec)
+        self.figureMouse.update_figure(self.nbClicSec)
+        self.nbKeySec = 0
+        self.nbClicSec = 0
+    
+    def resetSecValues(self):
+        self.figureKey.reset_figure()
+        self.figureMouse.reset_figure()
     
     def closeApplication(self):
         exit()
     
     def openWinMouse(self):
-        self.winMouse.show()
+        self.winMouseGraph.show()
         self.tableMouseWidget.show()
         
     def openWinKey(self):
-        self.winKey.show()
+        self.winKeyGraph.show()
         self.tableKeyWigdet.show()
     
     def openWinKeyStats(self):
-        self.winKeyStats.show()
-        self.tableKeyStatsWidget.show()
+        if self.ui.actionKeyboard_Stats.isChecked():
+            self.winKeyStats.show()
+        else:
+            self.winKeyStats.hide()
+        
+    def openWinKeyGraph(self):
+        if self.ui.actionKeyboard_frequency_graph.isChecked():
+            self.winKeyGraph.show()
+        else:
+            self.winKeyGraph.hide()
+            
+    def openWinMouseGraph(self):
+        if self.ui.actionMouse_frequency_graph.isChecked():
+            self.winMouseGraph.show()
+        else:
+            self.winMouseGraph.hide()
+        
         
     def openFile(self):
         filename = QtGui.QFileDialog.getOpenFileName(self,"Open R'n'Game file","","*txt")
@@ -190,8 +236,10 @@ class mrCWin(QtGui.QMainWindow):
     def updateTableMouseStats(self):
         if self.tableMouse[-1][0] == 'mouse left down':
             self.nbTotLeftCLic += 1
+            self.nbClicSec += 1
         if self.tableMouse[-1][0] == 'mouse right down':
             self.nbTotRightClic += 1 
+            self.nbClicSec += 1
         
         self.updateGlobalStats()
         
@@ -200,6 +248,7 @@ class mrCWin(QtGui.QMainWindow):
         found = False
         if self.tableKey[-1][0] == 'key down':
             self.nbTotKeyPress += 1
+            self.nbKeySec += 1
             for key in self.tableKeyStats:
                 for i in key:
                     if i == self.tableKey[-1][1]:
@@ -235,118 +284,153 @@ class mrCWin(QtGui.QMainWindow):
         self.ui.TotMouseLeftValue.setText(QtCore.QString.number(self.nbTotLeftCLic))
         self.ui.TotMouseRightValue.setText(QtCore.QString.number(self.nbTotRightClic))
         self.ui.TotMouseValue.setText(QtCore.QString.number(self.nbTotLeftCLic+self.nbTotRightClic))
-                 
+               
     def resetAllInputs(self):
+        self.globalTimer.stop()
         self.tableKey = []
         self.tableMouse = []
+        self.tableKeyStats = []
+        self.nbClicSec = 0
+        self.nbKeySec = 0
+        self.nbTotCilc = 0
+        self.nbTotKeyPress = 0
+        self.nbTotKeyReleased = 0
+        self.nbTotLeftCLic = 0
+        self.nbTotRightClic = 0
         
+        self.ui.KeyTabLayout.removeWidget(self.tableKeyWigdet)
+        self.tableKeyWigdet.deleteLater()
         self.tableKeyWigdet = QtGui.QTableWidget(self)
         list = QtCore.QStringList
         list = ["State", " Key "," Key Input ", " Time "]
         self.tableKeyWigdet.setColumnCount(4)
         self.tableKeyWigdet.setRowCount(0)
         self.tableKeyWigdet.setHorizontalHeaderLabels(list)
-        self.winKey.setWidget(self.tableKeyWigdet)
+        self.ui.KeyTabLayout.addWidget(self.tableKeyWigdet)
         
+        self.ui.MouseTabLayout.removeWidget(self.tableMouseWidget)
+        self.tableMouseWidget.deleteLater()
         self.tableMouseWidget = QtGui.QTableWidget(self)
         list = ["State", " Time "]
         self.tableMouseWidget.setColumnCount(2)
         self.tableMouseWidget.setRowCount(0)
         self.tableMouseWidget.setHorizontalHeaderLabels(list)
-        self.winMouse.setWidget(self.tableMouseWidget)
+        self.ui.MouseTabLayout.addWidget(self.tableMouseWidget)
         
+        self.tableKeyStatsWidget.deleteLater()
+        self.tableKeyStatsWidget = QtGui.QTableWidget(self)
+        list = ["Key", "count"]
+        self.tableKeyStatsWidget.setColumnCount(2)
+        self.tableKeyStatsWidget.setRowCount(0)
+        self.tableKeyStatsWidget.setHorizontalHeaderLabels(list)
+        self.winKeyStats.setWidget(self.tableKeyStatsWidget)
+        
+        self.resetSecValues()
+        self.updateTableKeyStats()
+        self.updateTableMouseStats()
+        self.update()
         
     """ ---------------------------------------- Linux CallBacks ----------------------------------------------------"""     
         
     def RunHookLinuxAllCallBack(self):
-        self.ui.actionRun_All_Record.setDisabled(True)
-        self.ui.actionRun_Key_Record.setDisabled(True)
-        self.ui.actionRun_Mouse_Record.setDisabled(True)
-        self.ui.actionStop_All_Record.setEnabled(True)
-        self.ui.actionStop_Key_Record.setEnabled(True)
-        self.ui.actionStop_Mouse_Record.setEnabled(True)
-        self.statusBarLabel.setText("Hook is running")
+        self.IsKeyRecord = True
+        self.IsMouseRecord = True
+        self.updateMenuActions()
         mrLinuxHookThread.RunAllCallBack(self)
         
     def RunHookLinuxKeyCallBack(self):
-        self.ui.actionRun_Key_Record.setDisabled(True)
-        self.ui.actionStop_Key_Record.setEnabled(True)
-        self.statusBarLabel.setText("Hook is running")
+        self.IsKeyRecord = True
+        self.updateMenuActions()
         mrLinuxHookThread.RunKeyCallBack(self)
     
     def RunHookLinuxMouseCallBack(self):
-        self.ui.actionRun_Mouse_Record.setDisabled(True)
-        self.ui.actionStop_Mouse_Record.setEnabled(True)
-        self.statusBarLabel.setText("Hook is running")
+        self.IsMouseRecord = True
+        self.updateMenuActions()
         mrLinuxHookThread.RunMouseCallBack(self)
     
     def StopHookLinuxAllCallBack(self):
-        self.ui.actionRun_All_Record.setEnabled(True)
-        self.ui.actionRun_Key_Record.setEnabled(True)
-        self.ui.actionRun_Mouse_Record.setEnabled(True)
-        self.ui.actionStop_All_Record.setDisabled(True)
-        self.ui.actionStop_Key_Record.setDisabled(True)
-        self.ui.actionStop_Mouse_Record.setDisabled(True)
-        self.statusBarLabel.setText("Hook is not running")
+        self.IsKeyRecord = False
+        self.IsMouseRecord = False
+        self.updateMenuActions()
         mrLinuxHookThread.StopAllCallBack(self)
         
     def StopHookLinuxKeyCallBack(self):
-        self.ui.actionRun_Key_Record.setEnabled(True)
-        self.ui.actionStop_Key_Record.setDisabled(True)
-        self.statusBarLabel.setText("Hook is not running")
+        self.IsKeyRecord = False
+        self.updateMenuActions()
         mrLinuxHookThread.StopKeyCallBack(self)
     
     def StopHookLinuxMouseCallBack(self):
-        self.ui.actionRun_Mouse_Record.setEnabled(True)
-        self.ui.actionStop_Mouse_Record.setDisabled(True)
-        self.statusBarLabel.setText("Hook is not running")
+        self.IsMouseRecord = False
+        self.updateMenuActions()
         mrLinuxHookThread.StopMouseCallBack(self)
         
     """ ---------------------------------------- Win CallBacks ----------------------------------------------------"""
         
     def RunHookWinAllCallBack(self):
-        self.ui.actionRun_All_Record.setDisabled(True)
-        self.ui.actionRun_Key_Record.setDisabled(True)
-        self.ui.actionRun_Mouse_Record.setDisabled(True)
-        self.ui.actionStop_All_Record.setEnabled(True)
-        self.ui.actionStop_Key_Record.setEnabled(True)
-        self.ui.actionStop_Mouse_Record.setEnabled(True)
-        self.statusBarLabel.setText("Hook is running")
+        self.IsKeyRecord = True
+        self.IsMouseRecord = True
+        self.updateMenuActions()
         mrWinHookThread.RunAllCallBack(self)
         
     def RunHookWinKeyCallBack(self):
-        self.ui.actionRun_Key_Record.setDisabled(True)
-        self.ui.actionStop_Key_Record.setEnabled(True)
-        self.statusBarLabel.setText("Hook is running")
+        self.IsKeyRecord = True
+        self.updateMenuActions()
         mrWinHookThread.RunKeyCallBack(self)
         
     def RunHookWinMouseCallBack(self):
-        self.ui.actionRun_Mouse_Record.setDisabled(True)
-        self.ui.actionStop_Mouse_Record.setEnabled(True)
-        self.statusBarLabel.setText("Hook is running")
+        self.IsMouseRecord = True
+        self.updateMenuActions()
         mrWinHookThread.RunMouseCallBack(self)
         
     def StopHookWinAllCallBack(self):
-        self.ui.actionRun_All_Record.setEnabled(True)
-        self.ui.actionRun_Key_Record.setEnabled(True)
-        self.ui.actionRun_Mouse_Record.setEnabled(True)
-        self.ui.actionStop_All_Record.setDisabled(True)
-        self.ui.actionStop_Key_Record.setDisabled(True)
-        self.ui.actionStop_Mouse_Record.setDisabled(True)
-        self.statusBarLabel.setText("Hook is not running")
+        self.IsKeyRecord = False
+        self.IsMouseRecord = False
+        self.updateMenuActions()
         mrWinHookThread.StopAllCallBack(self) 
         
     def StopHookWinKeyCallBack(self):
-        self.ui.actionRun_Key_Record.setEnabled(True)
-        self.ui.actionStop_Key_Record.setDisabled(True)
-        self.statusBarLabel.setText("Hook is not running")
+        self.IsKeyRecord = False
+        self.updateMenuActions()
         mrWinHookThread.StopKeyCallBack(self)
        
     def StopHookWinMouseCallBack(self):
-        self.ui.actionRun_Mouse_Record.setEnabled(True)
-        self.ui.actionStop_Mouse_Record.setDisabled(True)
-        self.statusBarLabel.setText("Hook is not running")
+        self.IsMouseRecord = False
+        self.updateMenuActions()
         mrWinHookThread.StopMouseCallBack(self)
+    
+    def updateMenuActions(self):
+        if self.IsKeyRecord:
+            self.ui.actionRun_Key_Record.setDisabled(True)
+            self.ui.actionStop_Key_Record.setEnabled(True)
+            if not(self.globalTimer.isActive()):
+                self.globalTimer.start(self.refreshTimerLevel)
+                self.statusBarLabel.setText("Hook is running")
+                
+        if self.IsMouseRecord:
+            self.ui.actionRun_Mouse_Record.setDisabled(True)
+            self.ui.actionStop_Mouse_Record.setEnabled(True)
+            if not(self.globalTimer.isActive()):
+                self.globalTimer.start(self.refreshTimerLevel)
+                self.statusBarLabel.setText("Hook is running")
+                
+        if not(self.IsKeyRecord):
+            self.ui.actionRun_Key_Record.setEnabled(True)
+            self.ui.actionStop_Key_Record.setDisabled(True)
+            
+        if not(self.IsMouseRecord):
+            self.ui.actionRun_Mouse_Record.setEnabled(True)
+            self.ui.actionStop_Mouse_Record.setDisabled(True)
+            
+        if self.IsKeyRecord & self.IsMouseRecord:
+            self.ui.actionRun_All_Record.setDisabled(True)
+            self.ui.actionStop_All_Record.setEnabled(True)
+            
+        if not(self.IsKeyRecord | self.IsMouseRecord):
+            self.statusBarLabel.setText("Hook is not running")
+            self.ui.actionRun_All_Record.setEnabled(True)
+            self.ui.actionStop_All_Record.setDisabled(True)
+            self.globalTimer.stop()
+           
         
 
 if __name__ == "__main__":

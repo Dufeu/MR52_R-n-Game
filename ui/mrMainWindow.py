@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mrMainWindow.ui'
 #
-# Created: Fri Nov 23 01:48:42 2012
+# Created: Sat Nov 24 00:32:52 2012
 #      by: PyQt4 UI code generator 4.9.5
 #
 # WARNING! All changes made in this file will be lost!
@@ -38,14 +38,27 @@ class Ui_MainWindow(object):
         self.verticalLayout.setContentsMargins(0, 6, 6, 6)
         self.verticalLayout.setObjectName(_fromUtf8("verticalLayout"))
         self.tabWidget = QtGui.QTabWidget(self.centralwidget)
-        self.tabWidget.setMinimumSize(QtCore.QSize(180, 0))
+        self.tabWidget.setMinimumSize(QtCore.QSize(220, 0))
+        self.tabWidget.setMovable(True)
         self.tabWidget.setObjectName(_fromUtf8("tabWidget"))
         self.KeyTab = QtGui.QWidget()
         self.KeyTab.setObjectName(_fromUtf8("KeyTab"))
-        self.tabWidget.addTab(self.KeyTab, _fromUtf8(""))
+        self.gridLayout_7 = QtGui.QGridLayout(self.KeyTab)
+        self.gridLayout_7.setMargin(0)
+        self.gridLayout_7.setObjectName(_fromUtf8("gridLayout_7"))
+        self.KeyTabLayout = QtGui.QGridLayout()
+        self.KeyTabLayout.setObjectName(_fromUtf8("KeyTabLayout"))
+        self.gridLayout_7.addLayout(self.KeyTabLayout, 0, 0, 1, 1)
+        self.tabWidget.addTab(self.KeyTab, icon, _fromUtf8(""))
         self.MouseTab = QtGui.QWidget()
         self.MouseTab.setObjectName(_fromUtf8("MouseTab"))
-        self.tabWidget.addTab(self.MouseTab, _fromUtf8(""))
+        self.gridLayout_6 = QtGui.QGridLayout(self.MouseTab)
+        self.gridLayout_6.setMargin(0)
+        self.gridLayout_6.setObjectName(_fromUtf8("gridLayout_6"))
+        self.MouseTabLayout = QtGui.QGridLayout()
+        self.MouseTabLayout.setObjectName(_fromUtf8("MouseTabLayout"))
+        self.gridLayout_6.addLayout(self.MouseTabLayout, 0, 0, 1, 1)
+        self.tabWidget.addTab(self.MouseTab, icon, _fromUtf8(""))
         self.verticalLayout.addWidget(self.tabWidget)
         self.groupGlobalStats = QtGui.QGroupBox(self.centralwidget)
         self.groupGlobalStats.setMinimumSize(QtCore.QSize(0, 245))
@@ -150,9 +163,19 @@ class Ui_MainWindow(object):
         self.actionReset_Inputs = QtGui.QAction(MainWindow)
         self.actionReset_Inputs.setObjectName(_fromUtf8("actionReset_Inputs"))
         self.actionKeyboard_Stats = QtGui.QAction(MainWindow)
+        self.actionKeyboard_Stats.setCheckable(True)
+        self.actionKeyboard_Stats.setChecked(True)
         self.actionKeyboard_Stats.setObjectName(_fromUtf8("actionKeyboard_Stats"))
         self.actionMouse_Stats = QtGui.QAction(MainWindow)
         self.actionMouse_Stats.setObjectName(_fromUtf8("actionMouse_Stats"))
+        self.actionKeyboard_frequency_graph = QtGui.QAction(MainWindow)
+        self.actionKeyboard_frequency_graph.setCheckable(True)
+        self.actionKeyboard_frequency_graph.setChecked(True)
+        self.actionKeyboard_frequency_graph.setObjectName(_fromUtf8("actionKeyboard_frequency_graph"))
+        self.actionMouse_frequency_graph = QtGui.QAction(MainWindow)
+        self.actionMouse_frequency_graph.setCheckable(True)
+        self.actionMouse_frequency_graph.setChecked(True)
+        self.actionMouse_frequency_graph.setObjectName(_fromUtf8("actionMouse_frequency_graph"))
         self.menuFile.addAction(self.actionOpen)
         self.menuFile.addAction(self.actionSave)
         self.menuFile.addSeparator()
@@ -169,11 +192,10 @@ class Ui_MainWindow(object):
         self.menuStop.addAction(self.actionStop_Mouse_Record)
         self.menuAbout.addAction(self.actionAbout_Me)
         self.menuAbout.addAction(self.actionVersion)
-        self.menuDisplay.addAction(self.actionKeyboard_Table)
-        self.menuDisplay.addAction(self.actionMouse_Table)
-        self.menuDisplay.addSeparator()
         self.menuDisplay.addAction(self.actionKeyboard_Stats)
-        self.menuDisplay.addAction(self.actionMouse_Stats)
+        self.menuDisplay.addSeparator()
+        self.menuDisplay.addAction(self.actionKeyboard_frequency_graph)
+        self.menuDisplay.addAction(self.actionMouse_frequency_graph)
         self.menubar.addAction(self.menuFile.menuAction())
         self.menubar.addAction(self.menuRun.menuAction())
         self.menubar.addAction(self.menuStop.menuAction())
@@ -181,7 +203,7 @@ class Ui_MainWindow(object):
         self.menubar.addAction(self.menuAbout.menuAction())
 
         self.retranslateUi(MainWindow)
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(1)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -222,6 +244,8 @@ class Ui_MainWindow(object):
         self.actionReset_Inputs.setText(QtGui.QApplication.translate("MainWindow", "Reset Inputs", None, QtGui.QApplication.UnicodeUTF8))
         self.actionKeyboard_Stats.setText(QtGui.QApplication.translate("MainWindow", "Keyboard Stats", None, QtGui.QApplication.UnicodeUTF8))
         self.actionMouse_Stats.setText(QtGui.QApplication.translate("MainWindow", "Mouse Stats", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionKeyboard_frequency_graph.setText(QtGui.QApplication.translate("MainWindow", "Keyboard frequency graph", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionMouse_frequency_graph.setText(QtGui.QApplication.translate("MainWindow", "Mouse frequency graph", None, QtGui.QApplication.UnicodeUTF8))
 
 import res.res_rc
 
