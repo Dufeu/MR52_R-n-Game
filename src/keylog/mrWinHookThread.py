@@ -119,7 +119,7 @@ class WinHookThread(QtCore.QThread):
 def RunAllCallBack(self):
     if self.HookThread.isAliveKey() == False and self.HookThread.isAliveMouse() == False:
         self.HookThread.runAll()
-    elif self.isAliveMouse() == True:
+    elif self.HookThread.isAliveMouse() == True:
         self.HookThread.runKey()
     else:
         self.HookThread.runMouse()

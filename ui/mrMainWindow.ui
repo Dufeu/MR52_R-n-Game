@@ -7,7 +7,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>755</width>
+    <width>713</width>
     <height>600</height>
    </rect>
   </property>
@@ -28,11 +28,175 @@
     </property>
     <item row="0" column="0">
      <layout class="QGridLayout" name="gridLayout_2">
-      <property name="spacing">
+      <property name="margin">
        <number>0</number>
+      </property>
+      <property name="spacing">
+       <number>6</number>
       </property>
       <item row="0" column="0">
        <widget class="QMdiArea" name="mdiArea"/>
+      </item>
+      <item row="0" column="1" colspan="2">
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>6</number>
+        </property>
+        <property name="rightMargin">
+         <number>6</number>
+        </property>
+        <property name="bottomMargin">
+         <number>6</number>
+        </property>
+        <item>
+         <widget class="QTabWidget" name="tabWidget">
+          <property name="minimumSize">
+           <size>
+            <width>180</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="currentIndex">
+           <number>0</number>
+          </property>
+          <widget class="QWidget" name="KeyTab">
+           <attribute name="title">
+            <string>Key Stats</string>
+           </attribute>
+          </widget>
+          <widget class="QWidget" name="MouseTab">
+           <attribute name="title">
+            <string>Mouse Stats</string>
+           </attribute>
+          </widget>
+         </widget>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="groupGlobalStats">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>245</height>
+           </size>
+          </property>
+          <property name="title">
+           <string>Global Stats</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_3">
+           <property name="leftMargin">
+            <number>5</number>
+           </property>
+           <property name="topMargin">
+            <number>2</number>
+           </property>
+           <property name="rightMargin">
+            <number>5</number>
+           </property>
+           <property name="bottomMargin">
+            <number>5</number>
+           </property>
+           <property name="horizontalSpacing">
+            <number>2</number>
+           </property>
+           <item row="0" column="0">
+            <layout class="QVBoxLayout" name="verticalLayout_2">
+             <item>
+              <widget class="QGroupBox" name="groupKeyStats">
+               <property name="title">
+                <string>Keyboard</string>
+               </property>
+               <layout class="QGridLayout" name="gridLayout_4">
+                <item row="0" column="0">
+                 <widget class="QLabel" name="TotKeyPressLabel">
+                  <property name="text">
+                   <string>Total key pressed :</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="TotKeyReleasedLabel">
+                  <property name="text">
+                   <string>Total key released :</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QLabel" name="TotKeyPressValue">
+                  <property name="text">
+                   <string>0</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QLabel" name="TotKeyReleasedValue">
+                  <property name="text">
+                   <string>0</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="QGroupBox" name="groupMouseStats">
+               <property name="title">
+                <string>Mouse</string>
+               </property>
+               <layout class="QGridLayout" name="gridLayout_5">
+                <item row="1" column="0">
+                 <widget class="QLabel" name="TotMouseRightLabel">
+                  <property name="text">
+                   <string>Total right clic :</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QLabel" name="TotMouseRightValue">
+                  <property name="text">
+                   <string>0</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="0">
+                 <widget class="QLabel" name="TotMouseLeftLabel">
+                  <property name="text">
+                   <string>Total  left clic :</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QLabel" name="TotMouseLeftValue">
+                  <property name="text">
+                   <string>0</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QLabel" name="TotMouseLabel">
+                  <property name="text">
+                   <string>Total clic :</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="1">
+                 <widget class="QLabel" name="TotMouseValue">
+                  <property name="text">
+                   <string>0</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </widget>
+             </item>
+            </layout>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
       </item>
      </layout>
     </item>
@@ -43,7 +207,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>755</width>
+     <width>713</width>
      <height>21</height>
     </rect>
    </property>
@@ -89,6 +253,9 @@
     </property>
     <addaction name="actionKeyboard_Table"/>
     <addaction name="actionMouse_Table"/>
+    <addaction name="separator"/>
+    <addaction name="actionKeyboard_Stats"/>
+    <addaction name="actionMouse_Stats"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuRun"/>
@@ -174,6 +341,16 @@
   <action name="actionReset_Inputs">
    <property name="text">
     <string>Reset Inputs</string>
+   </property>
+  </action>
+  <action name="actionKeyboard_Stats">
+   <property name="text">
+    <string>Keyboard Stats</string>
+   </property>
+  </action>
+  <action name="actionMouse_Stats">
+   <property name="text">
+    <string>Mouse Stats</string>
    </property>
   </action>
  </widget>
