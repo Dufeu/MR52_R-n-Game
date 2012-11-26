@@ -116,29 +116,29 @@ class WinHookThread(QtCore.QThread):
             self.emit(QtCore.SIGNAL('sendTableKey'),self.tableKey)
         return True
         
-def RunAllCallBack(self):
-    if self.HookThread.isAliveKey() == False and self.HookThread.isAliveMouse() == False:
-        self.HookThread.runAll()
-    elif self.HookThread.isAliveMouse() == True:
-        self.HookThread.runKey()
-    else:
-        self.HookThread.runMouse()
-
-def StopAllCallBack(self):
-    self.HookThread.stop()
+    def RunAllCallBack(self):
+        if self.isAliveKey() == False and self.isAliveMouse() == False:
+            self.runAll()
+        elif self.isAliveMouse() == True:
+            self.runKey()
+        else:
+            self.runMouse()
     
-def RunKeyCallBack(self):
-    assert(self.HookThread.isAliveKey() == False)
-    self.HookThread.runKey()
-
-def StopKeyCallBack(self):
-    assert(self.HookThread.isAliveKey())
-    self.HookThread.stopKey()
+    def StopAllCallBack(self):
+        self.stop()
+        
+    def RunKeyCallBack(self):
+        assert(self.isAliveKey() == False)
+        self.runKey()
     
-def RunMouseCallBack(self):
-    assert(self.HookThread.isAliveMouse() == False)
-    self.HookThread.runMouse()
-    
-def StopMouseCallBack(self):
-    assert(self.HookThread.isAliveMouse())
-    self.HookThread.stopMouse()
+    def StopKeyCallBack(self):
+        assert(self.isAliveKey())
+        self.stopKey()
+        
+    def RunMouseCallBack(self):
+        assert(self.isAliveMouse() == False)
+        self.runMouse()
+        
+    def StopMouseCallBack(self):
+        assert(self.isAliveMouse())
+        self.stopMouse()

@@ -97,28 +97,18 @@ class mrCWin(QtGui.QMainWindow):
         
         if platform == "linux2":
             self.HookThread = mrLinuxHookThread.LinuxHookThread()
-            self.connect(self.ui.actionRun_All_Record, QtCore.SIGNAL('triggered()'),self.RunHookLinuxAllCallBack)
-            self.connect(self.ui.actionRun_Key_Record, QtCore.SIGNAL('triggered()'),self.RunHookLinuxKeyCallBack)
-            self.connect(self.ui.actionRun_Mouse_Record, QtCore.SIGNAL('triggered()'),self.RunHookLinuxMouseCallBack)
-            
-            self.connect(self.ui.actionStop_All_Record, QtCore.SIGNAL('triggered()'),self.StopHookLinuxAllCallBack)
-            self.connect(self.ui.actionStop_Key_Record, QtCore.SIGNAL('triggered()'),self.StopHookLinuxKeyCallBack)
-            self.connect(self.ui.actionStop_Mouse_Record, QtCore.SIGNAL('triggered()'),self.StopHookLinuxMouseCallBack)
-            
-            
         elif platform == "win32":
             self.HookThread = mrWinHookThread.WinHookThread()
-            self.connect(self.ui.actionRun_All_Record, QtCore.SIGNAL('triggered()'),self.RunHookWinAllCallBack)
-            self.connect(self.ui.actionRun_Key_Record, QtCore.SIGNAL('triggered()'),self.RunHookWinKeyCallBack)
-            self.connect(self.ui.actionRun_Mouse_Record, QtCore.SIGNAL('triggered()'),self.RunHookWinMouseCallBack)
-            self.connect(self.HookThread, QtCore.SIGNAL('sendTableKey'),self.updateTableKey)
-            self.connect(self.HookThread, QtCore.SIGNAL('sendTableMouse'),self.updateTableMouse)
-            
-            self.connect(self.ui.actionStop_All_Record, QtCore.SIGNAL('triggered()'),self.StopHookWinAllCallBack)
-            self.connect(self.ui.actionStop_Key_Record, QtCore.SIGNAL('triggered()'),self.StopHookWinKeyCallBack)
-            self.connect(self.ui.actionStop_Mouse_Record, QtCore.SIGNAL('triggered()'),self.StopHookWinMouseCallBack)
-
-            
+  
+        self.connect(self.ui.actionRun_All_Record, QtCore.SIGNAL('triggered()'),self.RunHookAllCallBack)
+        self.connect(self.ui.actionRun_Key_Record, QtCore.SIGNAL('triggered()'),self.RunHookKeyCallBack)
+        self.connect(self.ui.actionRun_Mouse_Record, QtCore.SIGNAL('triggered()'),self.RunHookMouseCallBack)
+        self.connect(self.ui.actionStop_All_Record, QtCore.SIGNAL('triggered()'),self.StopHookAllCallBack)
+        self.connect(self.ui.actionStop_Key_Record, QtCore.SIGNAL('triggered()'),self.StopHookKeyCallBack)
+        self.connect(self.ui.actionStop_Mouse_Record, QtCore.SIGNAL('triggered()'),self.StopHookMouseCallBack)
+        
+        self.connect(self.HookThread, QtCore.SIGNAL('sendTableKey'),self.updateTableKey)
+        self.connect(self.HookThread, QtCore.SIGNAL('sendTableMouse'),self.updateTableMouse)
         self.connect(self, QtCore.SIGNAL('destroyed()'),self.closeApplication)
         self.connect(self.ui.actionQuit,QtCore.SIGNAL('triggered()'),self.closeApplication)
         self.connect(self.ui.actionOpen,QtCore.SIGNAL('triggered()'),self.openFile)
@@ -332,71 +322,42 @@ class mrCWin(QtGui.QMainWindow):
         
     """ ---------------------------------------- Linux CallBacks ----------------------------------------------------"""     
         
-    def RunHookLinuxAllCallBack(self):
+    def RunHookAllCallBack(self):
         self.IsKeyRecord = True
         self.IsMouseRecord = True
         self.updateMenuActions()
-        mrLinuxHookThread.RunAllCallBack(self)
+        self.HookThread.RunAllCallBack()
+ 
         
-    def RunHookLinuxKeyCallBack(self):
+    def RunHookKeyCallBack(self):
         self.IsKeyRecord = True
         self.updateMenuActions()
-        mrLinuxHookThread.RunKeyCallBack(self)
+        self.HookThread.RunKeyCallBack()
+  
     
-    def RunHookLinuxMouseCallBack(self):
+    def RunHookMouseCallBack(self):
         self.IsMouseRecord = True
         self.updateMenuActions()
-        mrLinuxHookThread.RunMouseCallBack(self)
+        self.HookThread.RunMouseCallBack()
+        
     
-    def StopHookLinuxAllCallBack(self):
+    def StopHookAllCallBack(self):
         self.IsKeyRecord = False
         self.IsMouseRecord = False
         self.updateMenuActions()
-        mrLinuxHookThread.StopAllCallBack(self)
+        self.HookThread.StopAllCallBack()
         
-    def StopHookLinuxKeyCallBack(self):
+    def StopHookKeyCallBack(self):
         self.IsKeyRecord = False
         self.updateMenuActions()
-        mrLinuxHookThread.StopKeyCallBack(self)
+        self.HookThread.StopKeyCallBack()
+
     
-    def StopHookLinuxMouseCallBack(self):
+    def StopHookMouseCallBack(self):
         self.IsMouseRecord = False
         self.updateMenuActions()
-        mrLinuxHookThread.StopMouseCallBack(self)
-        
-    """ ---------------------------------------- Win CallBacks ----------------------------------------------------"""
-        
-    def RunHookWinAllCallBack(self):
-        self.IsKeyRecord = True
-        self.IsMouseRecord = True
-        self.updateMenuActions()
-        mrWinHookThread.RunAllCallBack(self)
-        
-    def RunHookWinKeyCallBack(self):
-        self.IsKeyRecord = True
-        self.updateMenuActions()
-        mrWinHookThread.RunKeyCallBack(self)
-        
-    def RunHookWinMouseCallBack(self):
-        self.IsMouseRecord = True
-        self.updateMenuActions()
-        mrWinHookThread.RunMouseCallBack(self)
-        
-    def StopHookWinAllCallBack(self):
-        self.IsKeyRecord = False
-        self.IsMouseRecord = False
-        self.updateMenuActions()
-        mrWinHookThread.StopAllCallBack(self) 
-        
-    def StopHookWinKeyCallBack(self):
-        self.IsKeyRecord = False
-        self.updateMenuActions()
-        mrWinHookThread.StopKeyCallBack(self)
-       
-    def StopHookWinMouseCallBack(self):
-        self.IsMouseRecord = False
-        self.updateMenuActions()
-        mrWinHookThread.StopMouseCallBack(self)
+        self.HookThread.StopMouseCallBack()
+
     
     def updateMenuActions(self):
         if self.IsKeyRecord:
