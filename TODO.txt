@@ -1,0 +1,4 @@
+TODO LIST :
+
+ - Save inputs as TXT, YAML or XML file.
+ - Read inputs files.

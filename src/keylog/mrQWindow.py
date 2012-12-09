@@ -95,9 +95,9 @@ class mrCWin(QtGui.QMainWindow):
         self.ui.mdiArea.addSubWindow(self.winKeyGraph)
         self.ui.mdiArea.addSubWindow(self.winKeyStats)
         
-        if platform == "linux2":
+        if sys.platform == "linux2":
             self.HookThread = mrLinuxHookThread.LinuxHookThread()
-        elif platform == "win32":
+        elif sys.platform == "win32":
             self.HookThread = mrWinHookThread.WinHookThread()
   
         self.connect(self.ui.actionRun_All_Record, QtCore.SIGNAL('triggered()'),self.RunHookAllCallBack)
@@ -316,11 +316,9 @@ class mrCWin(QtGui.QMainWindow):
         self.winKeyStats.setWidget(self.tableKeyStatsWidget)
         
         self.resetSecValues()
-        self.updateTableKeyStats()
-        self.updateTableMouseStats()
         self.update()
         
-    """ ---------------------------------------- Linux CallBacks ----------------------------------------------------"""     
+    """ ---------------------------------------- Menu actions CallBacks ----------------------------------------------------"""     
         
     def RunHookAllCallBack(self):
         self.IsKeyRecord = True
@@ -328,19 +326,16 @@ class mrCWin(QtGui.QMainWindow):
         self.updateMenuActions()
         self.HookThread.RunAllCallBack()
  
-        
     def RunHookKeyCallBack(self):
         self.IsKeyRecord = True
         self.updateMenuActions()
         self.HookThread.RunKeyCallBack()
   
-    
     def RunHookMouseCallBack(self):
         self.IsMouseRecord = True
         self.updateMenuActions()
         self.HookThread.RunMouseCallBack()
         
-    
     def StopHookAllCallBack(self):
         self.IsKeyRecord = False
         self.IsMouseRecord = False
@@ -351,14 +346,12 @@ class mrCWin(QtGui.QMainWindow):
         self.IsKeyRecord = False
         self.updateMenuActions()
         self.HookThread.StopKeyCallBack()
-
     
     def StopHookMouseCallBack(self):
         self.IsMouseRecord = False
         self.updateMenuActions()
         self.HookThread.StopMouseCallBack()
 
-    
     def updateMenuActions(self):
         if self.IsKeyRecord:
             self.ui.actionRun_Key_Record.setDisabled(True)
