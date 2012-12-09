@@ -31,7 +31,8 @@ class mrCWin(QtGui.QMainWindow):
         self.tableKey = []
         self.tableMouse = []
         self.tableKeyStats = []
-        self.globalTimer = QtCore.QTimer(self)
+        self.startTime = 0
+        self.refreshGraphTimer = QtCore.QTimer(self)
         self.refreshTimerLevel = 10000
         self.IsKeyRecord = False
         self.IsMouseRecord = False
@@ -90,10 +91,26 @@ class mrCWin(QtGui.QMainWindow):
         self.winKeyGraph.show()
         self.winMouseGraph.show()
         
+        """********************* Clic distribution Windows *************************"""
+        
+        self.winDistrib = QtGui.QMdiSubWindow(self)
+        self.winDistrib.setWindowTitle(" Clic distribution ")
+        self.distribScene = QtGui.QGraphicsScene(self)
+        self.distribView = QtGui.QGraphicsView(self)
+        self.distribView.setScene(self.distribScene)
+        self.penRight = QtGui.QPen()
+        self.penRight.setColor(QtGui.QColor(255,0,0))
+        self.penLeft = QtGui.QPen()
+        self.penLeft.setColor(QtGui.QColor(0,0,255))
+        self.winDistrib.setWidget(self.distribView)
+        self.distribView.setSceneRect(QtCore.QRectF(QtGui.QDesktopWidget().screenGeometry()))
+        self.distribView.show()
+        self.winDistrib.show()
         
         self.ui.mdiArea.addSubWindow(self.winMouseGraph)
         self.ui.mdiArea.addSubWindow(self.winKeyGraph)
         self.ui.mdiArea.addSubWindow(self.winKeyStats)
+        self.ui.mdiArea.addSubWindow(self.winDistrib)
         
         if sys.platform == "linux2":
             self.HookThread = mrLinuxHookThread.LinuxHookThread()
@@ -109,19 +126,21 @@ class mrCWin(QtGui.QMainWindow):
         
         self.connect(self.HookThread, QtCore.SIGNAL('sendTableKey'),self.updateTableKey)
         self.connect(self.HookThread, QtCore.SIGNAL('sendTableMouse'),self.updateTableMouse)
+        self.connect(self.HookThread, QtCore.SIGNAL('sendPosition'),self.updateClicDistribution)
         self.connect(self, QtCore.SIGNAL('destroyed()'),self.closeApplication)
         self.connect(self.ui.actionQuit,QtCore.SIGNAL('triggered()'),self.closeApplication)
         self.connect(self.ui.actionOpen,QtCore.SIGNAL('triggered()'),self.openFile)
         self.connect(self.ui.actionSave, QtCore.SIGNAL('triggered()'),self.saveFile)
         self.connect(self.ui.actionAbout_Me,QtCore.SIGNAL('triggered()'),self.openAbout)
         self.connect(self.ui.actionVersion,QtCore.SIGNAL('triggered()'),self.openVersion)
+        self.connect(self.ui.actionClick_Distribution,QtCore.SIGNAL('triggered()'),self.openCLickDistrib)
         self.connect(self.ui.actionKeyboard_frequency_graph,QtCore.SIGNAL('triggered()'),self.openWinKeyGraph)
         self.connect(self.ui.actionMouse_frequency_graph,QtCore.SIGNAL('triggered()'),self.openWinMouseGraph)
         self.connect(self.ui.actionKeyboard_Stats, QtCore.SIGNAL('triggered()'),self.openWinKeyStats)
         self.connect(self.ui.actionReset_Inputs, QtCore.SIGNAL('triggered()'),self.resetAllInputs)
         
     
-        self.connect(self.globalTimer, QtCore.SIGNAL('timeout()'),self.updateSecValues)
+        self.connect(self.refreshGraphTimer, QtCore.SIGNAL('timeout()'),self.updateSecValues)
         
         
         self.show()
@@ -165,6 +184,11 @@ class mrCWin(QtGui.QMainWindow):
         else:
             self.winMouseGraph.hide()
         
+    def openCLickDistrib(self):
+        if self.ui.actionClick_Distribution.isChecked():
+            self.winDistrib.show()
+        else:
+            self.winDistrib.hide()
         
     def openFile(self):
         filename = QtGui.QFileDialog.getOpenFileName(self,"Open R'n'Game file","","*txt")
@@ -204,7 +228,7 @@ class mrCWin(QtGui.QMainWindow):
         item.setFlags(QtCore.Qt.ItemIsEditable)
         self.tableKeyWigdet.setItem(self.tableKeyWigdet.rowCount()-1,2,item)
         
-        item = QtGui.QTableWidgetItem(QtCore.QString.number(tbKey[-1][3]))
+        item = QtGui.QTableWidgetItem(QtCore.QString.number(time.time()-self.startTime))
         item.setFlags(QtCore.Qt.ItemIsEditable)
         self.tableKeyWigdet.setItem(self.tableKeyWigdet.rowCount()-1,3,item)
         self.updateTableKeyStats()
@@ -217,7 +241,7 @@ class mrCWin(QtGui.QMainWindow):
         item = QtGui.QTableWidgetItem(tbMouse[-1][0])
         item.setFlags(QtCore.Qt.ItemIsEditable)
         self.tableMouseWidget.setItem(self.tableMouseWidget.rowCount()-1,0,item)
-        item = QtGui.QTableWidgetItem(QtCore.QString.number(tbMouse[-1][1]))
+        item = QtGui.QTableWidgetItem(QtCore.QString.number(time.time()-self.startTime))
         item.setFlags(QtCore.Qt.ItemIsEditable)
         self.tableMouseWidget.setItem(self.tableMouseWidget.rowCount()-1,1,item)
         
@@ -234,6 +258,12 @@ class mrCWin(QtGui.QMainWindow):
         self.updateGlobalStats()
         
     
+    def updateClicDistribution(self,position):
+        if self.tableMouse[-1][0] == 'mouse left down':
+            self.distribScene.addRect(QtCore.QRectF(position[0],position[1],1,1),self.penLeft)
+        if self.tableMouse[-1][0] == 'mouse right down':
+            self.distribScene.addRect(QtCore.QRectF(position[0],position[1],1,1),self.penRight)
+            
     def updateTableKeyStats(self):
         found = False
         if self.tableKey[-1][0] == 'key down':
@@ -276,7 +306,6 @@ class mrCWin(QtGui.QMainWindow):
         self.ui.TotMouseValue.setText(QtCore.QString.number(self.nbTotLeftCLic+self.nbTotRightClic))
                
     def resetAllInputs(self):
-        self.globalTimer.stop()
         self.tableKey = []
         self.tableMouse = []
         self.tableKeyStats = []
@@ -356,15 +385,17 @@ class mrCWin(QtGui.QMainWindow):
         if self.IsKeyRecord:
             self.ui.actionRun_Key_Record.setDisabled(True)
             self.ui.actionStop_Key_Record.setEnabled(True)
-            if not(self.globalTimer.isActive()):
-                self.globalTimer.start(self.refreshTimerLevel)
+            if not(self.refreshGraphTimer.isActive()):
+                self.refreshGraphTimer.start(self.refreshTimerLevel)
+                self.startTime = time.time()
                 self.statusBarLabel.setText("Hook is running")
                 
         if self.IsMouseRecord:
             self.ui.actionRun_Mouse_Record.setDisabled(True)
             self.ui.actionStop_Mouse_Record.setEnabled(True)
-            if not(self.globalTimer.isActive()):
-                self.globalTimer.start(self.refreshTimerLevel)
+            if not(self.refreshGraphTimer.isActive()):
+                self.refreshGraphTimer.start(self.refreshTimerLevel)
+                self.startTime = time.time()
                 self.statusBarLabel.setText("Hook is running")
                 
         if not(self.IsKeyRecord):
@@ -383,7 +414,8 @@ class mrCWin(QtGui.QMainWindow):
             self.statusBarLabel.setText("Hook is not running")
             self.ui.actionRun_All_Record.setEnabled(True)
             self.ui.actionStop_All_Record.setDisabled(True)
-            self.globalTimer.stop()
+            self.startTime = 0
+            self.refreshGraphTimer.stop()
            
         
 

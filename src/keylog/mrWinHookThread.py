@@ -24,7 +24,7 @@ class WinHookThread(QtCore.QThread):
         self.hm.KeyDown = self.OnKeyboardEvent
         self.hm.MouseAllButtonsDown = self.OnMouseEvent
         self.hm.MouseAllButtonsUp = self.OnMouseEvent
-        self.tableKey = [["","",0,0]]
+        self.tableKey = [["","",0]]
         self.tableMouse = []
     
     def runAll(self):
@@ -85,9 +85,10 @@ class WinHookThread(QtCore.QThread):
         print('Injected:',event.Injected)
         print('---')
         '''
-        self.tableMouse.append([event.MessageName,event.Time])
+        self.tableMouse.append([event.MessageName])
         #print([event.MessageName,event.Position,event.Time])
         self.emit(QtCore.SIGNAL('sendTableMouse'),self.tableMouse)
+        self.emit(QtCore.SIGNAL('sendPosition'),event.Position)
         
         # return True to pass the event to other handlers
         # return False to stop the event from propagating
@@ -111,7 +112,7 @@ class WinHookThread(QtCore.QThread):
         print('---')
         '''
         if (event.MessageName != self.tableKey[-1][0] or event.Key != self.tableKey[-1][1]):
-            self.tableKey.append([event.MessageName,event.Key,chr(event.Ascii),event.Time])
+            self.tableKey.append([event.MessageName,event.Key,chr(event.Ascii)])
             #print([event.MessageName,event.Key,chr(event.Ascii),event.Time])
             self.emit(QtCore.SIGNAL('sendTableKey'),self.tableKey)
         return True

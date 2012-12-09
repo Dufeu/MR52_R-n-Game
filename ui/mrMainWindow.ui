@@ -282,6 +282,8 @@
     <addaction name="separator"/>
     <addaction name="actionKeyboard_frequency_graph"/>
     <addaction name="actionMouse_frequency_graph"/>
+    <addaction name="separator"/>
+    <addaction name="actionClick_Distribution"/>
    </widget>
    <addaction name="menuFile"/>
    <addaction name="menuRun"/>
@@ -405,6 +407,17 @@
    </property>
    <property name="text">
     <string>Mouse frequency graph</string>
+   </property>
+  </action>
+  <action name="actionClick_Distribution">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Click Distribution</string>
    </property>
   </action>
  </widget>

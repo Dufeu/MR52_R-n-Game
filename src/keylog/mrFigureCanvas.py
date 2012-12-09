@@ -37,7 +37,9 @@ class mrFigureKey(mrFigureCanvas):
     
     def reset_figure(self):
         self.axes.plot(0,0)
+        self.tableKeySec = []
         self.draw()
+        
         
 class mrFigureMouse(mrFigureCanvas):
     def __init__(self,parent):
@@ -53,5 +55,7 @@ class mrFigureMouse(mrFigureCanvas):
         self.draw()
     def reset_figure(self):
         self.axes.plot(0,0)
+        self.tableMouseSec = []
         self.draw()
+
         

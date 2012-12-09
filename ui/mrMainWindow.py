@@ -2,7 +2,7 @@
 
 # Form implementation generated from reading ui file 'mrMainWindow.ui'
 #
-# Created: Sat Nov 24 00:32:52 2012
+# Created: Sun Dec 09 20:44:28 2012
 #      by: PyQt4 UI code generator 4.9.5
 #
 # WARNING! All changes made in this file will be lost!
@@ -176,6 +176,10 @@ class Ui_MainWindow(object):
         self.actionMouse_frequency_graph.setCheckable(True)
         self.actionMouse_frequency_graph.setChecked(True)
         self.actionMouse_frequency_graph.setObjectName(_fromUtf8("actionMouse_frequency_graph"))
+        self.actionClick_Distribution = QtGui.QAction(MainWindow)
+        self.actionClick_Distribution.setCheckable(True)
+        self.actionClick_Distribution.setChecked(True)
+        self.actionClick_Distribution.setObjectName(_fromUtf8("actionClick_Distribution"))
         self.menuFile.addAction(self.actionOpen)
         self.menuFile.addAction(self.actionSave)
         self.menuFile.addSeparator()
@@ -196,6 +200,8 @@ class Ui_MainWindow(object):
         self.menuDisplay.addSeparator()
         self.menuDisplay.addAction(self.actionKeyboard_frequency_graph)
         self.menuDisplay.addAction(self.actionMouse_frequency_graph)
+        self.menuDisplay.addSeparator()
+        self.menuDisplay.addAction(self.actionClick_Distribution)
         self.menubar.addAction(self.menuFile.menuAction())
         self.menubar.addAction(self.menuRun.menuAction())
         self.menubar.addAction(self.menuStop.menuAction())
@@ -246,6 +252,7 @@ class Ui_MainWindow(object):
         self.actionMouse_Stats.setText(QtGui.QApplication.translate("MainWindow", "Mouse Stats", None, QtGui.QApplication.UnicodeUTF8))
         self.actionKeyboard_frequency_graph.setText(QtGui.QApplication.translate("MainWindow", "Keyboard frequency graph", None, QtGui.QApplication.UnicodeUTF8))
         self.actionMouse_frequency_graph.setText(QtGui.QApplication.translate("MainWindow", "Mouse frequency graph", None, QtGui.QApplication.UnicodeUTF8))
+        self.actionClick_Distribution.setText(QtGui.QApplication.translate("MainWindow", "Click Distribution", None, QtGui.QApplication.UnicodeUTF8))
 
 import res.res_rc
 
