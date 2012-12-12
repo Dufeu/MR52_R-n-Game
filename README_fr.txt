@@ -13,7 +13,7 @@ Le développement et l'avancement des recherches sont réalisés sous la responsabi
 de Mathieu Triclot <mathieu.triclot@gmail.com> (Professeur en philosophie à l'Université de Technologie de Belfort-Montbéliard, 
 Auteur de la Philosophie des jeux vidéo). 
 
-Les sources sont entièrement libres: vous êtes autorisés à toutes mofications et réutilisations du code.
+Les sources sont entièrement libres: vous êtes autorisés à toutes modifications et réutilisations du code.
 Je serais simplement reconnaissant d'être cité dans vos sources si vous réutilisez une partie de mon code.
 
 --------------------------------- CODE REVIEW et BUG REPORT -----------------------------------------------
@@ -21,7 +21,7 @@ Je serais simplement reconnaissant d'être cité dans vos sources si vous réutilis
 L'application étant en cours de développement, je vous serais reconnaissant d'envoyer un e-mail à <lois.aubree@gmail.com> pour 
 signaler quelconque bug rencontré au cours de l'utilisation.
 
-Pour tous apports de fonctionnalité à l'application R'n'GAME, veuillez aussi prendre contact avec moi en envoyant un e-mail à 
+Pour tout apport de fonctionnalité à l'application R'n'GAME, veuillez aussi prendre contact avec moi en envoyant un e-mail à 
 <lois.aubree@gmail.com>. Pour tout ajout accepté vous serez cité dans les sources du code, dans le readme ainsi que sur le site 
 de l'application. 
 
@@ -33,7 +33,7 @@ Ce logiciel est développé en python et utilise les bibliothèques :
  - Matplotib pour le dessin des graphes des inputs.
 
 
-INTALLATION SOUS WINDOWS 32bit ou 64bit :
+******* INTALLATION SOUS WINDOWS 32bit ou 64bit :
 
 -------------------------------- PYTHON ------------------------------------------------------------
 
@@ -45,12 +45,12 @@ http://www.python.org/getit/
 ATTENTION : La version actuelle du logiciel n'est pas compatible avec python 3.X.
 
 Pour l'installation de greffons python sous Windows, il faut télécharger les executables correspondants aux plug-ins
-que l'on veut installer lancer l'executable.
+que l'on veut installer et lancer l'executable.
 Une détection du répertoire python où les greffons doivent être installer est alors lancée.
 
-Si aucun répertoire est trouvé, il peut y avoir deux problèmes :
+Si aucun répertoire n'a été trouvé, il peut y avoir deux problèmes :
 - L'executable téléchargé ne correspond pas à la version du système : Veuillez bien vérifier la version des executables téléchargés.
-- L'executable téléchargé ne correspond pas à la version de pyton installé : Veuillez bien vérifier pour quelle version de python les executables ont été crées.
+- L'executable téléchargé ne correspond pas à la version de python installé : Veuillez bien vérifier pour quelle version de python l'executable a été crée.
 
 -------------------------------- PYHOOK -------------------------------------------------------------
 
@@ -67,14 +67,12 @@ Veuillez choisir dans ce dossier l'executable correspondant à votre système (32 
 qu'il s'agit de la version 2.7 de python.
 
 Dans le build 218, vous choisirez alors :
-- pywin32-218.win-amd64-py2.7.exe pour un système 64 bit
-- pywin32-218.win32-py2.7.exe
-
-Remarquez que ce sont les deux executables les plus téléchargés.
+- pywin32-218.win-amd64-py2.7.exe pour un windows 64 bit
+- pywin32-218.win32-py2.7.exe pour un windows 32 bit
 
 Ensuite vous trouverez PyHook à cette adresse : 
 
-http://sourceforge.net/projects/pyhook/files/
+http://sourceforge.net/projects/pyhook/files/   ( pas de version 64bit, c'est normal )
 
 
 -------------------------------- MATPLOTLIB ---------------------------------------------------------
@@ -89,3 +87,22 @@ https://github.com/matplotlib/matplotlib/downloads
 INSTALLATION SOUS LINUX :
 
  arrive bientôt ! 
+
+ 
+ ********** LANCEMENT DE L'APPLICATION :
+ 
+ 
+  1) Option pour développeur :
+  	-	Installer eclipse et les plug-ins PyDev et Egit
+  	- 	Renseigner à Pydev le répertoire Python 2.7.X avec les biblotèques précédement installées
+  	-	Importer dans eclispe le projet git depuis le repo github : https://github.com/Dufeu/MR52_R-n-Game
+ 	-	lancer le programme en tant qu'application Pydev depuis le fichier mrQWindow.py
+ 	
+  2) Option pour utilisateur : 
+  	-	Récuperer le projet sur gitHub à l'aide d'un outil git : https://github.com/Dufeu/MR52_R-n-Game
+  	-	Lancer en ligne de commande l'application (dans la console windows 'win->cmd') :
+  			
+  			>Chemin_du_repertoire_python\python.exe chemin_du_repertoire_R'n'Game\src\keylog\mrQWindow.py
+  			
+  Si vous rencontrez des problèmes pour le lancement de l'application, n'hésitez pas à m'envoyer un e-mail.
+  
