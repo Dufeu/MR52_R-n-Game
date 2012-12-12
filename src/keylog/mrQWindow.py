@@ -10,6 +10,8 @@ import sys
 from ui import mrMainWindow
 from mrFigureCanvas import mrFigureKey
 from mrFigureCanvas import mrFigureMouse
+from mrKeyboardGraphicsView import *
+from mrClickGraphcisView import *
 
 if sys.platform == "linux2":
     import mrLinuxHookThread
@@ -91,26 +93,30 @@ class mrCWin(QtGui.QMainWindow):
         self.winKeyGraph.show()
         self.winMouseGraph.show()
         
-        """********************* Clic distribution Windows *************************"""
+        """********************* Click distribution Window *************************"""
         
-        self.winDistrib = QtGui.QMdiSubWindow(self)
-        self.winDistrib.setWindowTitle(" Clic distribution ")
-        self.distribScene = QtGui.QGraphicsScene(self)
-        self.distribView = QtGui.QGraphicsView(self)
-        self.distribView.setScene(self.distribScene)
-        self.penRight = QtGui.QPen()
-        self.penRight.setColor(QtGui.QColor(255,0,0))
-        self.penLeft = QtGui.QPen()
-        self.penLeft.setColor(QtGui.QColor(0,0,255))
-        self.winDistrib.setWidget(self.distribView)
-        self.distribView.setSceneRect(QtCore.QRectF(QtGui.QDesktopWidget().screenGeometry()))
-        self.distribView.show()
-        self.winDistrib.show()
+        self.winClickDistrib = QtGui.QMdiSubWindow(self)
+        self.winClickDistrib.setWindowTitle(" Click distribution ")
+        self.distribClickView = mrClickGraphicsView()
+        self.winClickDistrib.setWidget(self.distribClickView)
+        self.distribClickView.show()
+        self.winClickDistrib.show()
+        
+        """******************* Keyboard distribution Window **************************"""
+        
+        self.winKeyDistrib = QtGui.QMdiSubWindow(self)
+        self.winKeyDistrib.setWindowTitle(" Keyboard distribution (don't work presently) ")
+        self.distribKeyView = mrKeyboardGraphicsView()
+        self.winKeyDistrib.setWidget(self.distribKeyView)
+        self.distribKeyView.show()
+        self.winKeyDistrib.show()
         
         self.ui.mdiArea.addSubWindow(self.winMouseGraph)
         self.ui.mdiArea.addSubWindow(self.winKeyGraph)
         self.ui.mdiArea.addSubWindow(self.winKeyStats)
-        self.ui.mdiArea.addSubWindow(self.winDistrib)
+        self.ui.mdiArea.addSubWindow(self.winClickDistrib)
+        self.ui.mdiArea.addSubWindow(self.winKeyDistrib)
+        
         
         if sys.platform == "linux2":
             self.HookThread = mrLinuxHookThread.LinuxHookThread()
@@ -186,9 +192,9 @@ class mrCWin(QtGui.QMainWindow):
         
     def openCLickDistrib(self):
         if self.ui.actionClick_Distribution.isChecked():
-            self.winDistrib.show()
+            self.winClickDistrib.show()
         else:
-            self.winDistrib.hide()
+            self.winClickDistrib.hide()
         
     def openFile(self):
         filename = QtGui.QFileDialog.getOpenFileName(self,"Open R'n'Game file","","*txt")
@@ -259,10 +265,8 @@ class mrCWin(QtGui.QMainWindow):
         
     
     def updateClicDistribution(self,position):
-        if self.tableMouse[-1][0] == 'mouse left down':
-            self.distribScene.addRect(QtCore.QRectF(position[0],position[1],1,1),self.penLeft)
-        if self.tableMouse[-1][0] == 'mouse right down':
-            self.distribScene.addRect(QtCore.QRectF(position[0],position[1],1,1),self.penRight)
+        if self.tableMouse[-1][0] == 'mouse left down' or self.tableMouse[-1][0] == 'mouse right down':
+            self.distribClickView.updateClickView(position,self.nbTotCilc)
             
     def updateTableKeyStats(self):
         found = False
@@ -343,6 +347,8 @@ class mrCWin(QtGui.QMainWindow):
         self.tableKeyStatsWidget.setRowCount(0)
         self.tableKeyStatsWidget.setHorizontalHeaderLabels(list)
         self.winKeyStats.setWidget(self.tableKeyStatsWidget)
+        
+        self.distribClickView.reset()
         
         self.resetSecValues()
         self.update()
