@@ -27,7 +27,7 @@ de l'application.
 
 
 Ce logiciel est développé en python et utilise les bibliothèques :
- - PyQT4 pour l'interface.
+ - PyQt4 pour l'interface.
  - PyHook pour la capture d'inputs sur win32 ainsi que pyWin32.
  - pyxHook pour Linux ( inclue dans le dossier de l'application : pas besoin d'installer).
  - Matplotib pour le dessin des graphes des inputs.
@@ -84,6 +84,11 @@ Vous pouvez télécharger matplotlib à cette adresse :
 
 https://github.com/matplotlib/matplotlib/downloads
 
+-------------------------------- PyQt4 --------------------------------------------------------------
+
+Vous pouvez télécharger matplotlib à cette adresse :
+
+http://www.riverbankcomputing.co.uk/software/pyqt/download (voir binary packages)
 
 /********************************************************************************************************************************************************/
 
