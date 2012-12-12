@@ -72,8 +72,11 @@ Dans le build 218, vous choisirez alors :
 
 Ensuite vous trouverez PyHook à cette adresse : 
 
-http://sourceforge.net/projects/pyhook/files/   ( pas de version 64bit, c'est normal )
+- http://sourceforge.net/projects/pyhook/files/    Il n'y a pas de version 64bit !?! 
 
+Pas de panique, vous la trouverez ,ici:
+
+http://www.lfd.uci.edu/~gohlke/pythonlibs/  
 
 -------------------------------- MATPLOTLIB ---------------------------------------------------------
 
