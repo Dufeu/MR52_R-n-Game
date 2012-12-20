@@ -5,13 +5,9 @@ Created on 28 oct. 2012
 
 This thread is called by the mrQWindow when the recognized OS is Windows
 '''
-import sys
 import pyHook
-import thread
-import threading
+from PyQt4 import QtCore
 import pythoncom
-import time
-from PyQt4 import QtCore,QtGui
 
 
 class WinHookThread(QtCore.QThread):
@@ -26,30 +22,41 @@ class WinHookThread(QtCore.QThread):
         self.hm.MouseAllButtonsUp = self.OnMouseEvent
         self.tableKey = [["","",0]]
         self.tableMouse = []
+        
+        self.setTerminationEnabled(True)
     
     def runAll(self):
         self.hm.HookMouse()
         self.hm.HookKeyboard()
+        self.wait()
         self.is_Key_alive = True
         self.is_Mouse_alive = True
-        pythoncom.PumpMessages()
-    
+        pythoncom.PumpMessages ()
+     
     def runKey(self):
         self.hm.HookKeyboard()
         self.is_Key_alive = True
-        pythoncom.PumpMessages()
+        pythoncom.PumpMessages ()
+    
     
     def runMouse(self):
         self.hm.HookMouse()
         self.is_Mouse_alive = True
-        pythoncom.PumpMessages()
-        
+        pythoncom.PumpMessages ()
         
     def stop(self):
         self.hm.UnhookMouse()
         self.hm.UnhookKeyboard()
         self.is_Key_alive = False
         self.is_Mouse_alive = False
+    
+    def destroy(self):
+        self.stop()
+        self.hm.destroy()
+        self.terminate()
+        self.wait(200)
+        self.quit()
+       
     
     def stopKey(self):
         self.hm.UnhookKeyboard()

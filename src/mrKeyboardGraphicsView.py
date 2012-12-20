@@ -4,6 +4,7 @@ Created on 9 dec. 2012
 @author: Lois Aubree
 '''
 from PyQt4 import QtGui,QtCore
+import os
 
 class mrKeyboardGraphicsView(QtGui.QGraphicsView):
     def __init__(self):
@@ -11,7 +12,7 @@ class mrKeyboardGraphicsView(QtGui.QGraphicsView):
         self.sceneKeyboard = QtGui.QGraphicsScene(self)
         self.setScene(self.sceneKeyboard)
         self.KeyboardImage = QtGui.QPixmap()
-        self.KeyboardImage.load("../../res/image/keyboard.png")
+        self.KeyboardImage.load('image/keyboard.png')
         self.sceneKeyboard.addPixmap(self.KeyboardImage)
         self.setMinimumSize(self.KeyboardImage.width()+20,self.KeyboardImage.height()+20)
         self.key_width = 27  
@@ -219,7 +220,7 @@ class mrKeyboardGraphicsView(QtGui.QGraphicsView):
         tmpX = 347
         self.enter_rect = QtCore.QRectF(tmpX,tmpY,57,self.key_width)
         
-        tmpY = 320
+        tmpX = 320
         self.back_rect = QtCore.QRectF(tmpX,tmpY,57,self.key_width)
         
         self.sceneKeyboard.addRect(self.space_rect)

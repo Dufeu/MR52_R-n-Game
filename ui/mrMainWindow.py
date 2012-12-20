@@ -2,8 +2,8 @@
 
 # Form implementation generated from reading ui file 'mrMainWindow.ui'
 #
-# Created: Sun Dec 09 20:44:28 2012
-#      by: PyQt4 UI code generator 4.9.5
+# Created: Thu Dec 13 00:25:41 2012
+#      by: PyQt4 UI code generator 4.9.6
 #
 # WARNING! All changes made in this file will be lost!
 
@@ -12,7 +12,16 @@ from PyQt4 import QtCore, QtGui
 try:
     _fromUtf8 = QtCore.QString.fromUtf8
 except AttributeError:
-    _fromUtf8 = lambda s: s
+    def _fromUtf8(s):
+        return s
+
+try:
+    _encoding = QtGui.QApplication.UnicodeUTF8
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig, _encoding)
+except AttributeError:
+    def _translate(context, text, disambig):
+        return QtGui.QApplication.translate(context, text, disambig)
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -213,48 +222,48 @@ class Ui_MainWindow(object):
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(QtGui.QApplication.translate("MainWindow", "MainWindow", None, QtGui.QApplication.UnicodeUTF8))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.KeyTab), QtGui.QApplication.translate("MainWindow", "Key Stats", None, QtGui.QApplication.UnicodeUTF8))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.MouseTab), QtGui.QApplication.translate("MainWindow", "Mouse Stats", None, QtGui.QApplication.UnicodeUTF8))
-        self.groupGlobalStats.setTitle(QtGui.QApplication.translate("MainWindow", "Global Stats", None, QtGui.QApplication.UnicodeUTF8))
-        self.groupKeyStats.setTitle(QtGui.QApplication.translate("MainWindow", "Keyboard", None, QtGui.QApplication.UnicodeUTF8))
-        self.TotKeyPressLabel.setText(QtGui.QApplication.translate("MainWindow", "Total key pressed :", None, QtGui.QApplication.UnicodeUTF8))
-        self.TotKeyReleasedLabel.setText(QtGui.QApplication.translate("MainWindow", "Total key released :", None, QtGui.QApplication.UnicodeUTF8))
-        self.TotKeyPressValue.setText(QtGui.QApplication.translate("MainWindow", "0", None, QtGui.QApplication.UnicodeUTF8))
-        self.TotKeyReleasedValue.setText(QtGui.QApplication.translate("MainWindow", "0", None, QtGui.QApplication.UnicodeUTF8))
-        self.groupMouseStats.setTitle(QtGui.QApplication.translate("MainWindow", "Mouse", None, QtGui.QApplication.UnicodeUTF8))
-        self.TotMouseRightLabel.setText(QtGui.QApplication.translate("MainWindow", "Total right clic :", None, QtGui.QApplication.UnicodeUTF8))
-        self.TotMouseRightValue.setText(QtGui.QApplication.translate("MainWindow", "0", None, QtGui.QApplication.UnicodeUTF8))
-        self.TotMouseLeftLabel.setText(QtGui.QApplication.translate("MainWindow", "Total  left clic :", None, QtGui.QApplication.UnicodeUTF8))
-        self.TotMouseLeftValue.setText(QtGui.QApplication.translate("MainWindow", "0", None, QtGui.QApplication.UnicodeUTF8))
-        self.TotMouseLabel.setText(QtGui.QApplication.translate("MainWindow", "Total clic :", None, QtGui.QApplication.UnicodeUTF8))
-        self.TotMouseValue.setText(QtGui.QApplication.translate("MainWindow", "0", None, QtGui.QApplication.UnicodeUTF8))
-        self.menuFile.setTitle(QtGui.QApplication.translate("MainWindow", "File", None, QtGui.QApplication.UnicodeUTF8))
-        self.menuRun.setTitle(QtGui.QApplication.translate("MainWindow", "Run", None, QtGui.QApplication.UnicodeUTF8))
-        self.menuStop.setTitle(QtGui.QApplication.translate("MainWindow", "Stop", None, QtGui.QApplication.UnicodeUTF8))
-        self.menuAbout.setTitle(QtGui.QApplication.translate("MainWindow", "About", None, QtGui.QApplication.UnicodeUTF8))
-        self.menuDisplay.setTitle(QtGui.QApplication.translate("MainWindow", "Display", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionOpen.setText(QtGui.QApplication.translate("MainWindow", "Open", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionSave.setText(QtGui.QApplication.translate("MainWindow", "Save", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionQuit.setText(QtGui.QApplication.translate("MainWindow", "Quit", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionRun_All_Record.setText(QtGui.QApplication.translate("MainWindow", "Run All Record", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionRun_Key_Record.setText(QtGui.QApplication.translate("MainWindow", "Run Key Record", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionRun_Mouse_Record.setText(QtGui.QApplication.translate("MainWindow", "Run Mouse Record", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionStop_All_Record.setText(QtGui.QApplication.translate("MainWindow", "Stop All Record", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionStop_Key_Record.setText(QtGui.QApplication.translate("MainWindow", "Stop Key Record", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionStop_Mouse_Record.setText(QtGui.QApplication.translate("MainWindow", "Stop Mouse Record", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionAbout_Me.setText(QtGui.QApplication.translate("MainWindow", "About", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionVersion.setText(QtGui.QApplication.translate("MainWindow", "Version", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionKeyboard_Table.setText(QtGui.QApplication.translate("MainWindow", "Keyboard Table", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionMouse_Table.setText(QtGui.QApplication.translate("MainWindow", "Mouse Table", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionReset_Inputs.setText(QtGui.QApplication.translate("MainWindow", "Reset Inputs", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionKeyboard_Stats.setText(QtGui.QApplication.translate("MainWindow", "Keyboard Stats", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionMouse_Stats.setText(QtGui.QApplication.translate("MainWindow", "Mouse Stats", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionKeyboard_frequency_graph.setText(QtGui.QApplication.translate("MainWindow", "Keyboard frequency graph", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionMouse_frequency_graph.setText(QtGui.QApplication.translate("MainWindow", "Mouse frequency graph", None, QtGui.QApplication.UnicodeUTF8))
-        self.actionClick_Distribution.setText(QtGui.QApplication.translate("MainWindow", "Click Distribution", None, QtGui.QApplication.UnicodeUTF8))
+        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.KeyTab), _translate("MainWindow", "Key Stats", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.MouseTab), _translate("MainWindow", "Mouse Stats", None))
+        self.groupGlobalStats.setTitle(_translate("MainWindow", "Global Stats", None))
+        self.groupKeyStats.setTitle(_translate("MainWindow", "Keyboard", None))
+        self.TotKeyPressLabel.setText(_translate("MainWindow", "Total key pressed :", None))
+        self.TotKeyReleasedLabel.setText(_translate("MainWindow", "Total key released :", None))
+        self.TotKeyPressValue.setText(_translate("MainWindow", "0", None))
+        self.TotKeyReleasedValue.setText(_translate("MainWindow", "0", None))
+        self.groupMouseStats.setTitle(_translate("MainWindow", "Mouse", None))
+        self.TotMouseRightLabel.setText(_translate("MainWindow", "Total right clic :", None))
+        self.TotMouseRightValue.setText(_translate("MainWindow", "0", None))
+        self.TotMouseLeftLabel.setText(_translate("MainWindow", "Total  left clic :", None))
+        self.TotMouseLeftValue.setText(_translate("MainWindow", "0", None))
+        self.TotMouseLabel.setText(_translate("MainWindow", "Total clic :", None))
+        self.TotMouseValue.setText(_translate("MainWindow", "0", None))
+        self.menuFile.setTitle(_translate("MainWindow", "File", None))
+        self.menuRun.setTitle(_translate("MainWindow", "Run", None))
+        self.menuStop.setTitle(_translate("MainWindow", "Stop", None))
+        self.menuAbout.setTitle(_translate("MainWindow", "About", None))
+        self.menuDisplay.setTitle(_translate("MainWindow", "Display", None))
+        self.actionOpen.setText(_translate("MainWindow", "Open", None))
+        self.actionSave.setText(_translate("MainWindow", "Save", None))
+        self.actionQuit.setText(_translate("MainWindow", "Quit", None))
+        self.actionRun_All_Record.setText(_translate("MainWindow", "Run All Record", None))
+        self.actionRun_Key_Record.setText(_translate("MainWindow", "Run Key Record", None))
+        self.actionRun_Mouse_Record.setText(_translate("MainWindow", "Run Mouse Record", None))
+        self.actionStop_All_Record.setText(_translate("MainWindow", "Stop All Record", None))
+        self.actionStop_Key_Record.setText(_translate("MainWindow", "Stop Key Record", None))
+        self.actionStop_Mouse_Record.setText(_translate("MainWindow", "Stop Mouse Record", None))
+        self.actionAbout_Me.setText(_translate("MainWindow", "About", None))
+        self.actionVersion.setText(_translate("MainWindow", "Version", None))
+        self.actionKeyboard_Table.setText(_translate("MainWindow", "Keyboard Table", None))
+        self.actionMouse_Table.setText(_translate("MainWindow", "Mouse Table", None))
+        self.actionReset_Inputs.setText(_translate("MainWindow", "Reset Inputs", None))
+        self.actionKeyboard_Stats.setText(_translate("MainWindow", "Keyboard Stats", None))
+        self.actionMouse_Stats.setText(_translate("MainWindow", "Mouse Stats", None))
+        self.actionKeyboard_frequency_graph.setText(_translate("MainWindow", "Keyboard frequency graph", None))
+        self.actionMouse_frequency_graph.setText(_translate("MainWindow", "Mouse frequency graph", None))
+        self.actionClick_Distribution.setText(_translate("MainWindow", "Click Distribution", None))
 
-import res.res_rc
+import res_rc
 
 if __name__ == "__main__":
     import sys

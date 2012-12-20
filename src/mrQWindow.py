@@ -3,15 +3,16 @@ Created on 27 oct. 2012
 
 @author: Lois Aubree
 '''
-from PyQt4 import QtGui,QtCore
 import time
 import os
 import sys
+sys.path.append(os.path.dirname("C:\User\Abyss\workspace\MR52_R-n-Game\ui"))
 from ui import mrMainWindow
 from mrFigureCanvas import mrFigureKey
 from mrFigureCanvas import mrFigureMouse
-from mrKeyboardGraphicsView import *
-from mrClickGraphcisView import *
+from PyQt4 import QtGui,QtCore
+from mrKeyboardGraphicsView import mrKeyboardGraphicsView
+from mrClickGraphcisView import mrClickGraphicsView
 
 if sys.platform == "linux2":
     import mrLinuxHookThread
@@ -19,10 +20,11 @@ elif sys.platform == "win32":
     import mrWinHookThread
 else :
     print("OS not recognized")
-class mrCWin(QtGui.QMainWindow):
+    
+class mrWindow(QtGui.QMainWindow):
 
     def __init__(self,platform):
-        super(mrCWin,self).__init__()
+        super(mrWindow,self).__init__()
         self.initUI(platform)
     
     def initUI(self,platform):
@@ -118,10 +120,10 @@ class mrCWin(QtGui.QMainWindow):
         self.ui.mdiArea.addSubWindow(self.winKeyDistrib)
         
         
-        if sys.platform == "linux2":
+        """if sys.platform == "linux2":
             self.HookThread = mrLinuxHookThread.LinuxHookThread()
-        elif sys.platform == "win32":
-            self.HookThread = mrWinHookThread.WinHookThread()
+        elif sys.platform == "win32":"""
+        self.HookThread = mrWinHookThread.WinHookThread()
   
         self.connect(self.ui.actionRun_All_Record, QtCore.SIGNAL('triggered()'),self.RunHookAllCallBack)
         self.connect(self.ui.actionRun_Key_Record, QtCore.SIGNAL('triggered()'),self.RunHookKeyCallBack)
@@ -133,8 +135,7 @@ class mrCWin(QtGui.QMainWindow):
         self.connect(self.HookThread, QtCore.SIGNAL('sendTableKey'),self.updateTableKey)
         self.connect(self.HookThread, QtCore.SIGNAL('sendTableMouse'),self.updateTableMouse)
         self.connect(self.HookThread, QtCore.SIGNAL('sendPosition'),self.updateClicDistribution)
-        self.connect(self, QtCore.SIGNAL('destroyed()'),self.closeApplication)
-        self.connect(self.ui.actionQuit,QtCore.SIGNAL('triggered()'),self.closeApplication)
+        self.connect(self.ui.actionQuit,QtCore.SIGNAL('triggered()'),self.close)
         self.connect(self.ui.actionOpen,QtCore.SIGNAL('triggered()'),self.openFile)
         self.connect(self.ui.actionSave, QtCore.SIGNAL('triggered()'),self.saveFile)
         self.connect(self.ui.actionAbout_Me,QtCore.SIGNAL('triggered()'),self.openAbout)
@@ -159,11 +160,8 @@ class mrCWin(QtGui.QMainWindow):
     
     def resetSecValues(self):
         self.figureKey.reset_figure()
-        self.figureMouse.reset_figure()
-    
-    def closeApplication(self):
-        exit()
-    
+        self.figureMouse.reset_figure() 
+        
     def openWinMouse(self):
         self.winMouseGraph.show()
         self.tableMouseWidget.show()
@@ -171,6 +169,11 @@ class mrCWin(QtGui.QMainWindow):
     def openWinKey(self):
         self.winKeyGraph.show()
         self.tableKeyWigdet.show()
+        
+    def closeEvent(self, *args, **kwargs):
+        self.HookThread.StopAllCallBack()
+        self.emit(QtCore.SIGNAL('closeApplication'))
+        return QtGui.QMainWindow.closeEvent(self, *args, **kwargs)
     
     def openWinKeyStats(self):
         if self.ui.actionKeyboard_Stats.isChecked():
@@ -376,6 +379,7 @@ class mrCWin(QtGui.QMainWindow):
         self.IsMouseRecord = False
         self.updateMenuActions()
         self.HookThread.StopAllCallBack()
+        del self.HookThread
         
     def StopHookKeyCallBack(self):
         self.IsKeyRecord = False
@@ -422,12 +426,5 @@ class mrCWin(QtGui.QMainWindow):
             self.ui.actionStop_All_Record.setDisabled(True)
             self.startTime = 0
             self.refreshGraphTimer.stop()
-           
-        
-
-if __name__ == "__main__":
-    app = QtGui.QApplication(sys.argv)   
-    win = mrCWin(sys.platform)
-    app.exec_()
         
         
