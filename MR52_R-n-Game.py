@@ -7,7 +7,7 @@ Created on 13 dec. 2012
 from src import mrQWindow
 from ui import mrMainWindow
 import sys
-import pythoncom
+from multiprocessing import freeze_support
 
 from PyQt4 import QtCore,QtGui
 
@@ -16,17 +16,10 @@ class mrRnGameApp(QtGui.QApplication):
         QtGui.QApplication.__init__(self,argv)
         self.platform = sys.platform
         self.win = mrQWindow.mrWindow(sys.platform)
-    
-        self.connect(self.win, QtCore.SIGNAL('closeApplication'),self.closeApp)
         self.win.show()
     
-    def closeApp(self):
-        sys.exit(0)
-        
-        
 
 if __name__ == "__main__":
+    freeze_support()
     app =  mrRnGameApp(sys.argv)
-
-    app.exec_()
-    
+    sys.exit(app.exec_())
