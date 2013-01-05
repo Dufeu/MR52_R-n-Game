@@ -14,7 +14,7 @@ DefaultGroupName=RnGame
 UninstallDisplayIcon={app}\R'n'Game.exe
 Compression=lzma2
 SolidCompression=yes
-OutputDir=userdocs:Inno Setup Examples Output
+OutputDir=".\"
 ; "ArchitecturesAllowed=x64" specifies that Setup cannot run on
 ; anything but x64.
 ArchitecturesAllowed=x64
