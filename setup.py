@@ -33,24 +33,25 @@ setup(windows=[{ 'script' : "MR52_R-n-Game.py",
       data_files=matplotlib.get_py2exe_datafiles())"""
       
 from cx_Freeze import setup, Executable
+import matplotlib
 
 includes = []
 excludes = ['_gtkagg', '_tkagg', 'bsddb', 'curses', 'email', 'pywin.debugger',
              'pywin.debugger.dbgcon', 'pywin.dialogs', 'tcl','Tkconstants', 'Tkinter']
 
-include_files = ['image/keyboard.png','image/icon/icon.png']
+include_files = ['image/keyboard.png','image/icon/icon.png',(matplotlib.get_data_path(),"mpl-data")]
 
 setup(
-    name = "R'n'Game.exe",
+    name = "R'n'Games.exe",
     version = "0.1",
-    description = "R'n'Game",
+    description = "R'n'Games",
     author = "Lois Aubree",
     options = {"build_exe" : {"includes" : includes,
                                "excludes" : excludes,
                                "include_files" : include_files,
                                "packages" : [],
                                "path" : []}},
-    executables = [Executable("MR52_R-n-Game.py", base = "Win32GUI" , icon = 'image/icon/icon.ico',targetName="R'n'Game.exe")])
+    executables = [Executable("MR52_R-n-Game.py", base = "Win32GUI" , icon = 'image/icon/icon.ico',targetName="R'n'Games.exe")])
       
       
 

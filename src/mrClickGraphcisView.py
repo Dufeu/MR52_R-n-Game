@@ -3,7 +3,7 @@ Created on 10 dec. 2012
 
 @author: lois Aubree
 '''
-from PyQt4 import QtGui,QtCore
+from PyQt4 import QtGui,QtCore, Qt
 
 class mrClickGraphicsView (QtGui.QGraphicsView):
     def __init__(self):
@@ -22,6 +22,7 @@ class mrClickGraphicsView (QtGui.QGraphicsView):
         
         self.setSceneRect(self.viewportRect)
         self.clickScene.addRect(self.viewportRect)
+        self.tablePoint = []
         self.nbClickTotal = 0
         self.max = 0
         self.tableRect = []
@@ -45,6 +46,11 @@ class mrClickGraphicsView (QtGui.QGraphicsView):
         for rect in self.tableRect:
             brush = self.getBrushColor(rect[1],self.max)
             self.clickScene.addRect(rect[0], self.pen,brush);
+        """tmp = QtCore.QRectF()
+        tmp.setCoords(position[0]-2,position[1]-2,position[0]+2,position[1]+2)
+        self.tablePoint.append(tmp)
+        for point in self.tablePoint:
+            self.clickScene.addEllipse(point, QtGui.QPen(QtGui.QColor(255,0,0)))"""
         
         self.clickScene.setSceneRect(self.viewportRect)
         self.clickScene.addRect(self.viewportRect)

@@ -7,11 +7,11 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING .ISS SCRIPT FILES!
 
 [Setup]
-AppName=R'n'Game
+AppName=R'n'Games
 AppVersion=1.0
-DefaultDirName={pf}\RnGame
-DefaultGroupName=RnGame
-UninstallDisplayIcon={app}\R'n'Game.exe
+DefaultDirName={pf}\RnGames
+DefaultGroupName=RnGames
+UninstallDisplayIcon={app}\R'n'Games.exe
 Compression=lzma2
 SolidCompression=yes
 OutputDir=".\"
@@ -24,12 +24,10 @@ ArchitecturesAllowed=x64
 ArchitecturesInstallIn64BitMode=x64
 
 [Files]
-Source: "build\exe.win-amd64-2.7\*" ; DestDir: "{app}"
-Source: "build\exe.win-amd64-2.7\image\*" ; DestDir: "{app}\image"
-Source: "build\exe.win-amd64-2.7\mpl-data\matplotlibrc" ; DestDir: "{app}\mpl-data"
+Source: "build\exe.win-amd64-2.7\*" ; DestDir: "{app}" ; Flags : recursesubdirs
 Source: "README_fr.txt"; DestDir: "{app}"; Flags: isreadme
 
 
 [Icons]
-Name: "{group}\R'n'Game"; Filename: "{app}\R'n'Game.exe"
-Name: "{group}\Uninstall R'n'Game"; Filename: "{uninstallexe}"
+Name: "{group}\R'n'Games"; Filename: "{app}\R'n'Games.exe"
+Name: "{group}\Uninstall R'n'Games"; Filename: "{uninstallexe}"

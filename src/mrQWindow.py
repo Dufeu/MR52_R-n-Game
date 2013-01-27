@@ -13,6 +13,7 @@ from PyQt4 import QtGui,QtCore
 from mrKeyboardGraphicsView import mrKeyboardGraphicsView
 from mrClickGraphcisView import mrClickGraphicsView
 import ctypes
+import xlwt
 from multiprocessing import Queue,Process,freeze_support
 
 """if sys.platform == "linux2":
@@ -33,7 +34,7 @@ class mrWindow(QtGui.QMainWindow):
         self.ui = mrMainWindow.Ui_MainWindow()
         self.ui.setupUi(self)
         #self.setWindowIcon(QtGui.QIcon("../../res/icon/icon.png"))
-        self.setWindowTitle(" Rythme'n'Game ")
+        self.setWindowTitle("Rhythm'n'Games")
         self.tableKey = [["","",0]]
         self.tableMouse = []
         self.tableKeyStats = []
@@ -54,7 +55,19 @@ class mrWindow(QtGui.QMainWindow):
         
         self.statusBarLabel = QtGui.QLabel("Hook is not running")
         
+        self.q = Queue()
+        self.event_Listener = WinHookListener(self.q)
+        self.HookThread = WinHookThread(self.q)
+        self.HookThread.dataReady.connect(self.on_hook_event)
+        
         self.ui.statusbar.addWidget(self.statusBarLabel)
+        self.trayIcon = QtGui.QSystemTrayIcon(QtGui.QIcon("image/icon/icon.png"), self)
+        self.sysMenu = QtGui.QMenu()
+        self.sysShowAction = QtGui.QAction("Show",self)
+        self.sysQuitAction = QtGui.QAction("Quit",self)
+        self.sysMenu.addAction(self.sysShowAction)
+        self.sysMenu.addAction(self.sysQuitAction)
+        
         
         """***************************  INPUTS TABLES **********************************"""
         self.tableKeyWigdet = QtGui.QTableWidget(self)
@@ -109,7 +122,7 @@ class mrWindow(QtGui.QMainWindow):
         """******************* Keyboard distribution Window **************************"""
         
         self.winKeyDistrib = QtGui.QMdiSubWindow(self)
-        self.winKeyDistrib.setWindowTitle(" Keyboard distribution (don't work presently) ")
+        self.winKeyDistrib.setWindowTitle(" Keyboard distribution")
         self.distribKeyView = mrKeyboardGraphicsView()
         self.winKeyDistrib.setWidget(self.distribKeyView)
         self.distribKeyView.show()
@@ -125,7 +138,7 @@ class mrWindow(QtGui.QMainWindow):
         """if sys.platform == "linux2":
             self.HookThread = mrLinuxHookThread.LinuxHookThread()
         elif sys.platform == "win32":"""
-        
+              
         self.connect(self.ui.actionRun_All_Record, QtCore.SIGNAL('triggered()'),self.RunHookAllCallBack)
         self.connect(self.ui.actionRun_Key_Record, QtCore.SIGNAL('triggered()'),self.RunHookKeyCallBack)
         self.connect(self.ui.actionRun_Mouse_Record, QtCore.SIGNAL('triggered()'),self.RunHookMouseCallBack)
@@ -144,10 +157,12 @@ class mrWindow(QtGui.QMainWindow):
         self.connect(self.ui.actionKeyboard_Stats, QtCore.SIGNAL('triggered()'),self.openWinKeyStats)
         self.connect(self.ui.actionReset_Inputs, QtCore.SIGNAL('triggered()'),self.resetAllInputs)
         
+        self.connect(self.sysQuitAction,QtCore.SIGNAL('triggered()'),self.closeApplicaton)
+        self.connect(self.sysShowAction,QtCore.SIGNAL('triggered()'),self.showApplication)
+        
         self.connect(self.refreshGraphTimer, QtCore.SIGNAL('timeout()'),self.updateSecValues)
-        
-        self.show()
-        
+    
+    
     def on_hook_event(self,event):
         
         if(self.IsKeyRecord == True and (event.MessageName == "key up" or event.MessageName == "key down")):
@@ -180,13 +195,27 @@ class mrWindow(QtGui.QMainWindow):
         self.winKeyGraph.show()
         self.tableKeyWigdet.show()
         
-    def closeEvent(self, *args, **kwargs):
-        self.event_Listener.terminate()
+    def closeEvent(self,event):
+        if not self.isHidden():
+            event.ignore()
+        self.hide()
+
+        self.trayIcon.setContextMenu(self.sysMenu)
+        self.trayIcon.show()
+        self.trayIcon.showMessage("R'n'Games info","R'n'Games is still running in background !")
+        
+    def closeApplicaton(self):
+        if self.event_Listener.is_alive():
+            self.event_Listener.terminate()
         if self.HookThread.isRunning:
             self.HookThread.isRunning = False
             self.HookThread.wait()
-        return QtGui.QMainWindow.closeEvent(self, *args, **kwargs)
-    
+        self.close()
+        
+    def showApplication(self):
+        self.show()
+        self.trayIcon.hide()
+        
     def openWinKeyStats(self):
         if self.ui.actionKeyboard_Stats.isChecked():
             self.winKeyStats.show()
@@ -215,8 +244,37 @@ class mrWindow(QtGui.QMainWindow):
         filename = QtGui.QFileDialog.getOpenFileName(self,"Open R'n'Game file","","*txt")
     
     def saveFile(self):
-        filename = QtGui.QFileDialog.getSaveFileName(self,"Save R'n'Game file as ...","","*.txt")
-        
+        filename = unicode(QtGui.QFileDialog.getSaveFileName(self,"Save R'n'Game file as ...","",".xls(*.xls)"))
+        self.workBk = xlwt.Workbook()
+        if self.tableKey != [["","",0]]:
+            self.sheetKey = self.workBk.add_sheet("Key", cell_overwrite_ok=True)
+            for rows in range(self.tableKeyWigdet.rowCount()):
+                for cols in range(self.tableKeyWigdet.columnCount()):
+                    try:
+                        txt = str(self.tableKeyWigdet.item(rows, cols).text())
+                        self.sheetKey.write(rows, cols, txt)
+                    except AttributeError:
+                            pass
+        if self.tableKeyStats != []:
+            self.sheetKeyStats = self.workBk.add_sheet("Key global", cell_overwrite_ok=True)
+            for rows in range(self.tableKeyStatsWidget.rowCount()):
+                for cols in range(self.tableKeyStatsWidget.columnCount()):
+                    try:
+                        txt = str(self.tableKeyStatsWidget.item(rows, cols).text())
+                        self.sheetKeyStats.write(rows,cols, txt)
+                    except AttributeError:
+                            pass
+        if self.tableMouse != []:
+            self.sheetMouse = self.workBk.add_sheet("Mouse", cell_overwrite_ok=True)
+            for rows in range(self.tableMouseWidget.rowCount()):
+                for cols in range(self.tableMouseWidget.columnCount()):
+                    try:
+                        txt = str(self.tableMouseWidget.item(rows, cols).text())
+                        self.sheetMouse.write(rows, cols, txt)
+                    except AttributeError:
+                            pass
+        self.workBk.save(filename)
+      
     def openAbout(self):
         msgBox = QtGui.QMessageBox(self)
         msgBox.setWindowTitle("About R'n'Game")
@@ -234,7 +292,6 @@ class mrWindow(QtGui.QMainWindow):
         msgBox.show()
     
     def updateTableKey(self):
-        
         self.tableKeyWigdet.setRowCount(self.tableKeyWigdet.rowCount()+1)
         
         item = QtGui.QTableWidgetItem(self.tableKey[-1][0])
@@ -256,16 +313,13 @@ class mrWindow(QtGui.QMainWindow):
         
     
     def updateTableMouse(self):
-
-        self.tableMouseWidget.setRowCount(self.tableMouseWidget.rowCount()+1)
-        
+        self.tableMouseWidget.setRowCount(self.tableMouseWidget.rowCount()+1)        
         item = QtGui.QTableWidgetItem(self.tableMouse[-1][0])
         item.setFlags(QtCore.Qt.ItemIsEditable)
         self.tableMouseWidget.setItem(self.tableMouseWidget.rowCount()-1,0,item)
         item = QtGui.QTableWidgetItem(QtCore.QString.number(time.time()-self.startTime))
         item.setFlags(QtCore.Qt.ItemIsEditable)
-        self.tableMouseWidget.setItem(self.tableMouseWidget.rowCount()-1,1,item)
-        
+        self.tableMouseWidget.setItem(self.tableMouseWidget.rowCount()-1,1,item)       
         self.updateTableMouseStats()
         
     def updateTableMouseStats(self):
@@ -274,8 +328,7 @@ class mrWindow(QtGui.QMainWindow):
             self.nbClicSec += 1
         if self.tableMouse[-1][0] == 'mouse right down':
             self.nbTotRightClic += 1 
-            self.nbClicSec += 1
-        
+            self.nbClicSec += 1     
         self.updateGlobalStats()
         
     
@@ -311,6 +364,8 @@ class mrWindow(QtGui.QMainWindow):
                 item = QtGui.QTableWidgetItem(QtCore.QString.number(self.tableKeyStats[-1][1]))
                 item.setFlags(QtCore.Qt.ItemIsEditable)
                 self.tableKeyStatsWidget.setItem(self.tableKeyStatsWidget.rowCount()-1,1,item)
+                
+        self.distribKeyView.updateKeyBoardView(self.tableKeyStats)
             
         if self.tableKey[-1][0] == 'key up':
             self.nbTotKeyReleased +=1
@@ -374,34 +429,19 @@ class mrWindow(QtGui.QMainWindow):
         self.IsKeyRecord = True
         self.IsMouseRecord = True
         self.updateMenuActions()
-        q = Queue()
-        self.event_Listener = WinHookListener(q)
-        self.event_Listener.start()
-        
-        self.HookThread = WinHookThread(q)
-        self.HookThread.dataReady.connect(self.on_hook_event)
+        self.event_Listener.start()   
         self.HookThread.start()
  
     def RunHookKeyCallBack(self):
         self.IsKeyRecord = True
         self.updateMenuActions()
-        q = Queue()
-        self.event_Listener = WinHookListener(q)
-        self.HookThread.dataReady.connect(self.on_hook_event)
         self.event_Listener.start()
-        
-        self.HookThread = WinHookThread(q)
         self.HookThread.start()
   
     def RunHookMouseCallBack(self):
         self.IsMouseRecord = True
         self.updateMenuActions()
-        q = Queue()
-        self.event_Listener = WinHookListener(q)
-        self.HookThread.dataReady.connect(self.on_hook_event)
-        self.event_Listener.start()
-        
-        self.HookThread = WinHookThread(q)
+        self.event_Listener.start()      
         self.HookThread.start()
 
     def StopHookAllCallBack(self):

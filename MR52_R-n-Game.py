@@ -17,7 +17,6 @@ class mrRnGameApp(QtGui.QApplication):
         self.platform = sys.platform
         self.win = mrQWindow.mrWindow(sys.platform)
         self.win.show()
-    
 
 if __name__ == "__main__":
     freeze_support()
