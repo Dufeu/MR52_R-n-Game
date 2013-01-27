@@ -164,7 +164,6 @@ class mrWindow(QtGui.QMainWindow):
     
     
     def on_hook_event(self,event):
-        
         if(self.IsKeyRecord == True and (event.MessageName == "key up" or event.MessageName == "key down")):
             if (event.MessageName != self.tableKey[-1][0] or event.Key != self.tableKey[-1][1]):
                 self.tableKey.append([event.MessageName,event.Key,chr(event.Ascii)])
@@ -429,19 +428,22 @@ class mrWindow(QtGui.QMainWindow):
         self.IsKeyRecord = True
         self.IsMouseRecord = True
         self.updateMenuActions()
-        self.event_Listener.start()   
+        if not(self.event_Listener.is_alive()):
+            self.event_Listener.start()   
         self.HookThread.start()
  
     def RunHookKeyCallBack(self):
         self.IsKeyRecord = True
         self.updateMenuActions()
-        self.event_Listener.start()
+        if not(self.event_Listener.is_alive()):
+            self.event_Listener.start()
         self.HookThread.start()
   
     def RunHookMouseCallBack(self):
         self.IsMouseRecord = True
         self.updateMenuActions()
-        self.event_Listener.start()      
+        if not(self.event_Listener.is_alive()):
+            self.event_Listener.start()     
         self.HookThread.start()
 
     def StopHookAllCallBack(self):

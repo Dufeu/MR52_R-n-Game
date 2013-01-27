@@ -31,7 +31,6 @@ class WinHookListener(Process):
         self.hm.UnhookMouse()
         self.hm.UnhookKeyboard()
         
-
 class WinHookThread(QThread):
     
     dataReady = Signal(object)
